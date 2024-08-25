@@ -43,7 +43,7 @@
       "options": {
         "targetName": "test"
       },
-      "exclude": ["apps/server/express-app-e2e/**/*"]
+      "exclude": ["apps/express-e2e/**/*"]
     },
     {
       "plugin": "@nx/webpack/plugin",
