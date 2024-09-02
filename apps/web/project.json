@@ -11,6 +11,44 @@
         "jestConfig": "apps/web/jest.config.ts",
         "passWithNoTests": true
       }
+    },
+    "build": {
+      "executor": "@nrwl/next:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/web"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/next:server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "web:build",
+        "dev": true
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "web:build:development",
+          "dev": true
+        },
+        "production": {
+          "buildTarget": "web:build:production",
+          "dev": false,
+          "port": 3001
+        }
+      }
+    },
+    "start": {
+      "executor": "@nrwl/next:server",
+      "options": {
+        "buildTarget": "web:build:production",
+        "port": 3001
+      }
     }
   }
 }
