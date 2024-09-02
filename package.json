@@ -2,7 +2,11 @@
   "name": "@nx-next-shadcn/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "start": "nx run-many -t start serve web,server",
+    "restart:web": "nx start web",
+    "restart:server": "nx build server"
+  },
   "private": true,
   "devDependencies": {
     "@nx/devkit": "19.5.3",
