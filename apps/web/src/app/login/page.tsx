@@ -1,12 +1,16 @@
+"use client";
+
 import React from "react";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 import { Button, Checkbox, Input, Label } from "@nx-next-shadcn/shadcn";
 
-const page = () => {
+const Login = () => {
+  const router = useRouter();
   const handleLoginButton = () => {
-    console.log("");
+    router.push("/dashboard");
   };
   return (
     <div className="flex h-screen flex-col-reverse md:flex-row">
@@ -31,7 +35,9 @@ const page = () => {
               <Checkbox id="terms" />
               <Label htmlFor="terms">Remember me</Label>
             </div>
-            <Button className="w-full p-7 text-xl">LOGIN</Button>
+            <Button onClick={handleLoginButton} className="w-full p-7 text-xl">
+              LOGIN
+            </Button>
           </div>
         </div>
       </div>
@@ -48,4 +54,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Login;

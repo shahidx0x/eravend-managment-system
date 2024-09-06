@@ -6,7 +6,7 @@ module.exports = {
   content: [
     join(
       __dirname,
-      "{src,pages,components,app}/**/*!(*.stories|*.spec).{ts,tsx,html}",
+      "{src,pages,components,app}/**/*!(*.stories|*.spec).{ts,tsx,html,js,jsx}",
     ),
     ...createGlobPatternsForDependencies(__dirname),
   ],
@@ -18,6 +18,9 @@ module.exports = {
       padding: "2rem",
       screens: {
         "2xl": "1400px",
+      },
+      breakpointsInspector: {
+        position: ["bottom", "left"],
       },
     },
     extend: {
@@ -77,5 +80,8 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require("tailwindcss-breakpoints-inspector"),
+  ],
 };
