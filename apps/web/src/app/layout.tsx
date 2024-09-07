@@ -1,5 +1,12 @@
-import { ThemeProvider } from "./components/theme-provider";
+import { Metadata } from "next";
+
+import { ThemeProvider } from "../components/theme-provider";
 import "./global.css";
+
+export const metadata: Metadata = {
+  title: "EraVend CRM",
+  description: "This is the EraVend's CRM System.",
+};
 
 export default function RootLayout({
   children,
