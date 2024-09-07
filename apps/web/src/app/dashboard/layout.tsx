@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 
-import Footer from "../components/footer";
-import HeaderNav from "../components/header-nav";
-import Sidebar from "../components/sidebar";
+import Footer from "../../components/footer";
+import HeaderNav from "../../components/header-nav";
+import Sidebar from "../../components/sidebar";
 
 export default function DashboardLayout({
   children,
