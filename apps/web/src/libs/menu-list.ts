@@ -1,12 +1,5 @@
-import {
-  Tag,
-  Users,
-  Settings,
-  Bookmark,
-  SquarePen,
-  LayoutGrid,
-  LucideIcon,
-} from "lucide-react";
+import { Tag, Users, Settings, Bookmark, SquarePen, LayoutGrid, LucideIcon } from "lucide-react";
+
 
 type Submenu = {
   href: string;
@@ -30,42 +23,12 @@ type Group = {
 export function getMenuList(pathname: string): Group[] {
   return [
     {
-      groupLabel: "",
+      groupLabel: "Company",
       menus: [
         {
-          href: "/dashboard",
-          label: "Dashboard",
-          active: pathname.includes("/dashboard"),
-          icon: LayoutGrid,
-          submenus: [],
-        },
-      ],
-    },
-    {
-      groupLabel: "Contents",
-      menus: [
-        {
-          href: "",
-          label: "Posts",
-          active: pathname.includes("/posts"),
-          icon: SquarePen,
-          submenus: [
-            {
-              href: "/posts",
-              label: "All Posts",
-              active: pathname === "/posts",
-            },
-            {
-              href: "/posts/new",
-              label: "New Post",
-              active: pathname === "/posts/new",
-            },
-          ],
-        },
-        {
-          href: "/categories",
-          label: "Categories",
-          active: pathname.includes("/categories"),
+          href: "/dashboard/company",
+          label: "Manage Company",
+          active: pathname.includes("/dashboard/company"),
           icon: Bookmark,
           submenus: [],
         },
@@ -99,3 +62,34 @@ export function getMenuList(pathname: string): Group[] {
     },
   ];
 }
+
+// {
+//   href: "",
+//   label: "Company Information",
+//   active: pathname.includes("/company"),
+//   icon: SquarePen,
+//   submenus: [
+//     {
+//       href: "/company/new",
+//       label: "Company",
+//       active: pathname === "/company",
+//     },
+//     {
+//       href: "/posts/new",
+//       label: "New Post",
+//       active: pathname === "/posts/new",
+//     },
+//   ],
+// },
+// {
+//   groupLabel: "",
+//   menus: [
+//     {
+//       href: "/dashboard",
+//       label: "Dashboard",
+//       active: pathname.includes("/dashboard"),
+//       icon: LayoutGrid,
+//       submenus: [],
+//     },
+//   ],
+// },
