@@ -2,21 +2,22 @@
 
 import React from "react";
 
+
+
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { useRouter } from "next/navigation";
 
+
+
 import { ChevronRight, LayoutDashboard, LogOut } from "lucide-react";
 
-import {
-  Button,
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@nx-next-shadcn/shadcn";
+
+
+import { Button, Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@nx-next-shadcn/shadcn";
+
+
+
+import { Menu } from "./sudebar-menu";
 
 interface SideBarProps {
   open: boolean;
@@ -33,9 +34,7 @@ const Sidebar: React.FC<SideBarProps> = ({ open, setOpen }) => {
     >
       <div className="center">
         {open ? (
-          <h2 className="p-2 font-mono text-5xl tracking-[0.2em] transition-[flex-basis] duration-700 ease-in-out">
-            ERAVEND
-          </h2>
+          <h2 className="p-2 font-mono text-5xl tracking-[0.2em]">ERAVEND</h2>
         ) : (
           <LayoutDashboard size={45} strokeWidth={1.0} />
         )}
@@ -52,6 +51,9 @@ const Sidebar: React.FC<SideBarProps> = ({ open, setOpen }) => {
             }`}
           />
         </Button>
+      </div>
+      <div>
+        <Menu isOpen={open} />
       </div>
       <div className="center pb-5">
         <LogoutDialog open={open} router={router} />

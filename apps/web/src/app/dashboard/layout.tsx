@@ -21,7 +21,7 @@ export default function DashboardLayout({
             open ? "basis-11/12" : "basis-full"
           }`}
         >
-          <HeaderNav />
+          <HeaderNav title="Dashboard"/>
           <main className="mx-10 my-10 h-full rounded-md bg-white shadow-sm dark:bg-[#09090b]">
             {children}
           </main>
