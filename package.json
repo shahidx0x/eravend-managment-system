@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "nx run-many -t start serve web,server",
+    "start": "nx run web:serve-static",
     "restart:web": "nx start web",
     "restart:server": "nx build server"
   },
