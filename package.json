@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "nx run web:serve",
     "build": "nx run web:build",
-    "start": "nx run web:build && nx run web:serve"
+    "start": "nx run web:build && nx run web:serve",
+    "nx:reset": "nx reset"
   },
   "private": true,
   "devDependencies": {
