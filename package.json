@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "nx run web:serve",
+    "serve": "nx run web:serve",
     "build": "nx run web:build",
-    "restart:server": "nx build server"
+    "start": "nx run web:build && nx run web:serve"
   },
   "private": true,
   "devDependencies": {
