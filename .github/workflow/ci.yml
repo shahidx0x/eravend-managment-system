@@ -1,0 +1,29 @@
+name: Deploy to VPS on Push to Development
+
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+  deploy:
+    name: Deploy to VPS
+    runs-on: ubuntu-latest
+
+    env:
+      VPS_USER: ${{ secrets.VPS_USER }}      
+      VPS_IP: ${{ secrets.VPS_IP }}          
+      VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }} 
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Install SSH key
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ env.VPS_SSH_KEY }}
+
+    - name: Deploy to VPS
+      run: |
+        ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_IP 'bash /www/nxems-ci.sh'
