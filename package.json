@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "nx run web:serve-static",
-    "restart:web": "nx start web",
+    "start": "nx run web:serve",
+    "build": "nx run web:build",
     "restart:server": "nx build server"
   },
   "private": true,
