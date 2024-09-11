@@ -3,17 +3,22 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
+
+
 import { Button, Checkbox, Input, Label } from "@nx-next-shadcn/shadcn";
+
+
 
 import loginImg from "../../assets/login/Illustration.svg";
 import eravendLogo from "../../assets/login/eravend.svg";
+
 
 const Login = () => {
   const router = useRouter();
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    router.push("/dashboard");
+    router.push("/dashboard/company");
   };
   return (
     <main>

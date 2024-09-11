@@ -2,10 +2,22 @@
 
 import * as React from "react";
 
+import Image from "next/image";
+
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
 
-import { Button } from "@nx-next-shadcn/shadcn";
-import { Checkbox } from "@nx-next-shadcn/shadcn";
+import { Label, Textarea } from "@nx-next-shadcn/shadcn";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@nx-next-shadcn/shadcn";
+import { Button, cn } from "@nx-next-shadcn/shadcn";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -37,51 +49,73 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-const data: Payment[] = [
+const data: Company[] = [
   {
     id: "m5gr84i9",
-    amount: 316,
-    status: "success",
+    company_name: "test",
+    location: "germany",
+    contact: "0101010101",
+    owner: "eravend",
     email: "ken99@yahoo.com",
+    logo: "/OIP.jpeg",
+    details:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi odio beatae eveniet odit quia nesciunt",
+  },
+  {
+    id: "m5gr84i9",
+    company_name: "test",
+    location: "germany",
+    contact: "0101010101",
+    owner: "eravend",
+    email: "ken99@yahoo.com",
+    logo: "/OIP.jpeg",
+    details:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi odio beatae eveniet odit quia nesciunt",
+  },
+  {
+    id: "m5gr84i9",
+    company_name: "test",
+    location: "germany",
+    contact: "0101010101",
+    owner: "eravend",
+    email: "ken99@yahoo.com",
+    logo: "/OIP.jpeg",
+    details:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi odio beatae eveniet odit quia nesciunt",
   },
 ];
 
-export type Payment = {
+export type Company = {
   id: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed";
+  logo: string;
+  company_name: string;
+  contact: string;
   email: string;
+  location: string;
+  owner: string;
+  details: string;
 };
 
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<Company>[] = [
   {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
-    ),
+    accessorKey: "company_name",
+    header: "Company",
+    cell: ({ row }) => {
+      console.log(row);
+      return (
+        <div className="flex items-center gap-5 capitalize">
+          <Image
+            src={row.original.logo}
+            alt={row.original.company_name}
+            width={50}
+            height={50}
+          />
+          <span className="text-lg font-medium">
+            {row.getValue("company_name")}
+          </span>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "email",
@@ -99,46 +133,131 @@ export const columns: ColumnDef<Payment>[] = [
     cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
   },
   {
-    accessorKey: "amount",
-    header: () => <div className="text-right">Amount</div>,
+    accessorKey: "location",
+    header: () => <div className="">Location</div>,
+    cell: ({ row }) => (
+      <div className="lowercase">{row.getValue("location")}</div>
+    ),
+  },
+  {
+    accessorKey: "contact",
+    header: () => <div className="">Contact</div>,
     cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"));
-
-      // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount);
-
-      return <div className="text-right font-medium">{formatted}</div>;
+      return <div className="font-medium">{row.getValue("contact")}</div>;
     },
+  },
+  {
+    accessorKey: "owner",
+    header: () => <div className="">Owner</div>,
+    cell: ({ row }) => <div className="lowercase">{row.getValue("owner")}</div>,
+  },
+  {
+    accessorKey: "details",
+    header: () => <div className="">Details</div>,
+    cell: ({ row }) => (
+      <div className="lowercase">{row.getValue("details")}</div>
+    ),
   },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original;
-
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex gap-5">
+          <Button variant="secondary" className="bg-indigo-200 text-indigo-600">
+            Manage
+          </Button>
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button
+                variant="secondary"
+                className="bg-yellow-200 text-yellow-600"
+              >
+                Update
+              </Button>
+            </SheetTrigger>
+            <SheetContent>
+              <SheetHeader>
+                <SheetTitle>Update</SheetTitle>
+                <SheetDescription>
+                  Update your company information
+                </SheetDescription>
+              </SheetHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="name" className="text-right">
+                    Name
+                  </Label>
+                  <Input
+                    id="name"
+                    value={row.original.company_name}
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="username" className="text-right">
+                    Email
+                  </Label>
+                  <Input
+                    id="username"
+                    type="email"
+                    value={row.original.email}
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="username" className="text-right">
+                    Location
+                  </Label>
+                  <Input
+                    id="username"
+                    value={row.original.location}
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="username" className="text-right">
+                    Conatact
+                  </Label>
+                  <Input
+                    id="username"
+                    value={row.original.contact}
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="username" className="text-right">
+                    Owner
+                  </Label>
+                  <Input
+                    id="username"
+                    value={row.original.owner}
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="username" className="text-right">
+                    Details
+                  </Label>
+
+                  <Textarea
+                    className="col-span-3"
+                    defaultValue={row.original.details}
+                    placeholder="Type your message here."
+                  />
+                </div>
+              </div>
+              <SheetFooter>
+                <SheetClose asChild>
+                  <Button type="submit">Update Company Info</Button>
+                </SheetClose>
+              </SheetFooter>
+            </SheetContent>
+          </Sheet>
+          <Button variant="secondary" className="bg-red-200 text-red-600">
+            Remove
+          </Button>
+        </div>
       );
     },
   },
@@ -185,7 +304,7 @@ export function DataTableCompany() {
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
+            <Button variant="outline" className="ml-auto mr-2">
               Columns <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
@@ -209,6 +328,75 @@ export function DataTableCompany() {
               })}
           </DropdownMenuContent>
         </DropdownMenu>
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button>Add Company</Button>
+          </SheetTrigger>
+          <SheetContent>
+            <SheetHeader>
+              <SheetTitle>Add Your Company</SheetTitle>
+              <SheetDescription>
+                Add your company that you want to manage it
+              </SheetDescription>
+            </SheetHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="name" className="text-right">
+                  Name
+                </Label>
+                <Input id="name" value="A Company" className="col-span-3" />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="username" className="text-right">
+                  Email
+                </Label>
+                <Input
+                  id="username"
+                  type="email"
+                  value="@eravend.com"
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="username" className="text-right">
+                  Location
+                </Label>
+                <Input id="username" value="Germany" className="col-span-3" />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="username" className="text-right">
+                  Conatact
+                </Label>
+                <Input
+                  id="username"
+                  value="+99019312431"
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="username" className="text-right">
+                  Owner
+                </Label>
+                <Input id="username" value="@eravend" className="col-span-3" />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="username" className="text-right">
+                  Details
+                </Label>
+
+                <Textarea
+                  className="col-span-3"
+                  placeholder="Type your message here."
+                />
+              </div>
+            </div>
+            <SheetFooter>
+              <SheetClose asChild>
+                <Button type="submit">Add Company</Button>
+              </SheetClose>
+            </SheetFooter>
+          </SheetContent>
+        </Sheet>
       </div>
       <div className="rounded-md border">
         <Table>
@@ -260,11 +448,8 @@ export function DataTableCompany() {
           </TableBody>
         </Table>
       </div>
+
       <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="text-muted-foreground flex-1 text-sm">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
-        </div>
         <div className="space-x-2">
           <Button
             variant="outline"
