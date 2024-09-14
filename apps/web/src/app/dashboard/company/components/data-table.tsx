@@ -2,52 +2,24 @@
 
 import * as React from "react";
 
+
+
 import Image from "next/image";
+
+
 
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
 
+
+
 import { Label, Textarea } from "@nx-next-shadcn/shadcn";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@nx-next-shadcn/shadcn";
 import { Button, cn } from "@nx-next-shadcn/shadcn";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@nx-next-shadcn/shadcn";
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@nx-next-shadcn/shadcn";
 import { Input } from "@nx-next-shadcn/shadcn";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@nx-next-shadcn/shadcn";
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@nx-next-shadcn/shadcn";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@nx-next-shadcn/shadcn";
+import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
+
 
 const data: Company[] = [
   {
@@ -101,7 +73,6 @@ export const columns: ColumnDef<Company>[] = [
     accessorKey: "company_name",
     header: "Company",
     cell: ({ row }) => {
-      console.log(row);
       return (
         <div className="flex items-center gap-5 capitalize">
           <Image
@@ -167,22 +138,22 @@ export const columns: ColumnDef<Company>[] = [
           <Button variant="secondary" className="bg-indigo-200 text-indigo-600">
             Manage
           </Button>
-          <Sheet>
-            <SheetTrigger asChild>
+          <Dialog>
+            <DialogTrigger asChild>
               <Button
                 variant="secondary"
                 className="bg-yellow-200 text-yellow-600"
               >
                 Update
               </Button>
-            </SheetTrigger>
-            <SheetContent>
-              <SheetHeader>
-                <SheetTitle>Update</SheetTitle>
-                <SheetDescription>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Update</DialogTitle>
+                <DialogDescription>
                   Update your company information
-                </SheetDescription>
-              </SheetHeader>
+                </DialogDescription>
+              </DialogHeader>
               <div className="grid gap-4 py-4">
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="name" className="text-right">
@@ -190,7 +161,7 @@ export const columns: ColumnDef<Company>[] = [
                   </Label>
                   <Input
                     id="name"
-                    value={row.original.company_name}
+                    defaultValue={row.original.company_name}
                     className="col-span-3"
                   />
                 </div>
@@ -201,7 +172,7 @@ export const columns: ColumnDef<Company>[] = [
                   <Input
                     id="username"
                     type="email"
-                    value={row.original.email}
+                    defaultValue={row.original.email}
                     className="col-span-3"
                   />
                 </div>
@@ -211,17 +182,17 @@ export const columns: ColumnDef<Company>[] = [
                   </Label>
                   <Input
                     id="username"
-                    value={row.original.location}
+                    defaultValue={row.original.location}
                     className="col-span-3"
                   />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="username" className="text-right">
-                    Conatact
+                    Contact
                   </Label>
                   <Input
                     id="username"
-                    value={row.original.contact}
+                    defaultValue={row.original.contact}
                     className="col-span-3"
                   />
                 </div>
@@ -231,7 +202,7 @@ export const columns: ColumnDef<Company>[] = [
                   </Label>
                   <Input
                     id="username"
-                    value={row.original.owner}
+                    defaultValue={row.original.owner}
                     className="col-span-3"
                   />
                 </div>
@@ -239,7 +210,6 @@ export const columns: ColumnDef<Company>[] = [
                   <Label htmlFor="username" className="text-right">
                     Details
                   </Label>
-
                   <Textarea
                     className="col-span-3"
                     defaultValue={row.original.details}
@@ -247,13 +217,11 @@ export const columns: ColumnDef<Company>[] = [
                   />
                 </div>
               </div>
-              <SheetFooter>
-                <SheetClose asChild>
-                  <Button type="submit">Update Company Info</Button>
-                </SheetClose>
-              </SheetFooter>
-            </SheetContent>
-          </Sheet>
+              <DialogFooter>
+                <Button type="submit">Update Company Info</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
           <Button variant="secondary" className="bg-red-200 text-red-600">
             Remove
           </Button>
@@ -328,23 +296,27 @@ export function DataTableCompany() {
               })}
           </DropdownMenuContent>
         </DropdownMenu>
-        <Sheet>
-          <SheetTrigger asChild>
+        <Dialog>
+          <DialogTrigger asChild>
             <Button>Add Company</Button>
-          </SheetTrigger>
-          <SheetContent>
-            <SheetHeader>
-              <SheetTitle>Add Your Company</SheetTitle>
-              <SheetDescription>
-                Add your company that you want to manage it
-              </SheetDescription>
-            </SheetHeader>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Add Your Company</DialogTitle>
+              <DialogDescription>
+                Add your company that you want to manage
+              </DialogDescription>
+            </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="name" className="text-right">
                   Name
                 </Label>
-                <Input id="name" value="A Company" className="col-span-3" />
+                <Input
+                  id="name"
+                  defaultValue="A Company"
+                  className="col-span-3"
+                />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="username" className="text-right">
@@ -353,7 +325,7 @@ export function DataTableCompany() {
                 <Input
                   id="username"
                   type="email"
-                  value="@eravend.com"
+                  defaultValue="@eravend.com"
                   className="col-span-3"
                 />
               </div>
@@ -361,15 +333,19 @@ export function DataTableCompany() {
                 <Label htmlFor="username" className="text-right">
                   Location
                 </Label>
-                <Input id="username" value="Germany" className="col-span-3" />
+                <Input
+                  id="username"
+                  defaultValue="Germany"
+                  className="col-span-3"
+                />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="username" className="text-right">
-                  Conatact
+                  Contact
                 </Label>
                 <Input
                   id="username"
-                  value="+99019312431"
+                  defaultValue="+99019312431"
                   className="col-span-3"
                 />
               </div>
@@ -377,26 +353,27 @@ export function DataTableCompany() {
                 <Label htmlFor="username" className="text-right">
                   Owner
                 </Label>
-                <Input id="username" value="@eravend" className="col-span-3" />
+                <Input
+                  id="username"
+                  defaultValue="@eravend"
+                  className="col-span-3"
+                />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="username" className="text-right">
                   Details
                 </Label>
-
                 <Textarea
                   className="col-span-3"
                   placeholder="Type your message here."
                 />
               </div>
             </div>
-            <SheetFooter>
-              <SheetClose asChild>
-                <Button type="submit">Add Company</Button>
-              </SheetClose>
-            </SheetFooter>
-          </SheetContent>
-        </Sheet>
+            <DialogFooter>
+              <Button type="submit">Add Company</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
       <div className="rounded-md border">
         <Table>
@@ -448,7 +425,6 @@ export function DataTableCompany() {
           </TableBody>
         </Table>
       </div>
-
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="space-x-2">
           <Button

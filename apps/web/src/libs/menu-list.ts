@@ -23,19 +23,19 @@ type Group = {
 export function getMenuList(pathname: string): Group[] {
   return [
     {
-      groupLabel: "Company",
+      groupLabel: "Manage",
       menus: [
         {
           href: "/dashboard/company",
-          label: "Manage Company",
+          label: "Company",
           active: pathname.includes("/dashboard/company"),
           icon: Bookmark,
           submenus: [],
         },
         {
-          href: "/tags",
-          label: "Tags",
-          active: pathname.includes("/tags"),
+          href: "/dashboard/users",
+          label: "Users",
+          active: pathname.includes("/dashboard/users"),
           icon: Tag,
           submenus: [],
         },
@@ -45,51 +45,14 @@ export function getMenuList(pathname: string): Group[] {
       groupLabel: "Settings",
       menus: [
         {
-          href: "/users",
-          label: "Users",
-          active: pathname.includes("/users"),
+          href: "/dashboard/user-profile",
+          label: "Account",
+          active: pathname.includes("/dashboard/user-profile"),
           icon: Users,
           submenus: [],
         },
-        {
-          href: "/account",
-          label: "Account",
-          active: pathname.includes("/account"),
-          icon: Settings,
-          submenus: [],
-        },
+    
       ],
     },
   ];
 }
-
-// {
-//   href: "",
-//   label: "Company Information",
-//   active: pathname.includes("/company"),
-//   icon: SquarePen,
-//   submenus: [
-//     {
-//       href: "/company/new",
-//       label: "Company",
-//       active: pathname === "/company",
-//     },
-//     {
-//       href: "/posts/new",
-//       label: "New Post",
-//       active: pathname === "/posts/new",
-//     },
-//   ],
-// },
-// {
-//   groupLabel: "",
-//   menus: [
-//     {
-//       href: "/dashboard",
-//       label: "Dashboard",
-//       active: pathname.includes("/dashboard"),
-//       icon: LayoutGrid,
-//       submenus: [],
-//     },
-//   ],
-// },
