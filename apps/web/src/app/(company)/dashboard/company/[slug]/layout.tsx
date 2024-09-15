@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 
-import Footer from "../../../../components/footer";
-import HeaderNav from "../../../../components/header-nav";
-import Sidebar from "../../../../components/sidebar";
+import Footer from "../../../../../components/footer";
+import HeaderNav from "../../../../../components/header-nav";
+import Sidebar from "../../../../../components/sidebar";
 
-export default function DashboardLayout({
+export default function CompanyDashboardLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -21,6 +21,7 @@ export default function DashboardLayout({
             open ? "basis-11/12" : "basis-full"
           }`}
         >
+          <HeaderNav title="Dashboard" />
           <main className="mx-10 my-10 h-full rounded-md bg-white shadow-sm dark:bg-[#09090b]">
             {children}
           </main>

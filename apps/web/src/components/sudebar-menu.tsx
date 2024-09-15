@@ -3,24 +3,80 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+
+
 import { Ellipsis, LogOut } from "lucide-react";
+import { Tag, Users, Settings, Bookmark, SquarePen, LayoutGrid, LucideIcon } from "lucide-react";
+
+
 
 import { Button, cn } from "@nx-next-shadcn/shadcn";
 import { ScrollArea } from "@nx-next-shadcn/shadcn";
-import {
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-  TooltipProvider,
-} from "@nx-next-shadcn/shadcn";
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@nx-next-shadcn/shadcn";
 
-import { getMenuList } from "../libs/menu-list";
+
+
 import { CollapseMenuButton } from "./collaps-menu-button";
+
 
 interface MenuProps {
   isOpen: boolean | undefined;
 }
 
+type Submenu = {
+  href: string;
+  label: string;
+  active: boolean;
+};
+
+type Menu = {
+  href: string;
+  label: string;
+  active: boolean;
+  icon: LucideIcon;
+  submenus: Submenu[];
+};
+
+type Group = {
+  groupLabel: string;
+  menus: Menu[];
+};
+
+export function getMenuList(pathname: string): Group[] {
+  return [
+    {
+      groupLabel: "Manage",
+      menus: [
+        {
+          href: "/dashboard/company",
+          label: "Company",
+          active: pathname.includes("/dashboard/company"),
+          icon: Bookmark,
+          submenus: [],
+        },
+        {
+          href: "/dashboard/users",
+          label: "Users",
+          active: pathname.includes("/dashboard/users"),
+          icon: Tag,
+          submenus: [],
+        },
+      ],
+    },
+    {
+      groupLabel: "Settings",
+      menus: [
+        {
+          href: "/dashboard/user-profile",
+          label: "Account",
+          active: pathname.includes("/dashboard/user-profile"),
+          icon: Users,
+          submenus: [],
+        },
+      ],
+    },
+  ];
+}
 export function Menu({ isOpen }: MenuProps) {
   const pathname = usePathname();
   const menuList = getMenuList(pathname);

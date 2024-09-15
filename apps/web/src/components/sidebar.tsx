@@ -13,9 +13,17 @@ import { ChevronRight, LayoutDashboard, LogOut } from "lucide-react";
 
 
 
-import { Button, Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@nx-next-shadcn/shadcn";
-
-
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  Separator,
+} from "@nx-next-shadcn/shadcn";
 
 import { Menu } from "./sudebar-menu";
 
@@ -28,7 +36,7 @@ const Sidebar: React.FC<SideBarProps> = ({ open, setOpen }) => {
   const router = useRouter();
   return (
     <aside
-      className={`relative flex flex-col justify-between shadow-sm transition-[flex-basis] duration-700 ease-in-out ${
+      className={`relative flex flex-col shadow-sm transition-[flex-basis] duration-700 ease-in-out ${
         open ? "h-screen basis-2/12" : "h-screen basis-[4rem]"
       }`}
     >
@@ -55,7 +63,7 @@ const Sidebar: React.FC<SideBarProps> = ({ open, setOpen }) => {
       <div>
         <Menu isOpen={open} />
       </div>
-      <div className="center pb-5">
+      <div className="center pb-5 pt-5">
         <LogoutDialog open={open} router={router} />
       </div>
     </aside>

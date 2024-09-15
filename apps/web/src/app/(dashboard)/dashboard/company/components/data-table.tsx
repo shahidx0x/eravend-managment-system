@@ -2,28 +2,57 @@
 
 import * as React from "react";
 
-
-
 import Image from "next/image";
-
-
+import Link from "next/link";
 
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
 
-
-
 import { Label, Textarea } from "@nx-next-shadcn/shadcn";
 import { Button, cn } from "@nx-next-shadcn/shadcn";
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@nx-next-shadcn/shadcn";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@nx-next-shadcn/shadcn";
 import { Input } from "@nx-next-shadcn/shadcn";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@nx-next-shadcn/shadcn";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@nx-next-shadcn/shadcn";
-import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
-
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@nx-next-shadcn/shadcn";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@nx-next-shadcn/shadcn";
+import {
+  ColumnDef,
+  ColumnFiltersState,
+  SortingState,
+  VisibilityState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
 
 const data: Company[] = [
   {
     id: "m5gr84i9",
+    slug: "test-company-name-slug",
     company_name: "test",
     location: "germany",
     contact: "0101010101",
@@ -35,6 +64,7 @@ const data: Company[] = [
   },
   {
     id: "m5gr84i9",
+    slug: "test-company-name-slug",
     company_name: "test",
     location: "germany",
     contact: "0101010101",
@@ -46,6 +76,7 @@ const data: Company[] = [
   },
   {
     id: "m5gr84i9",
+    slug: "test-company-name-slug",
     company_name: "test",
     location: "germany",
     contact: "0101010101",
@@ -66,6 +97,7 @@ export type Company = {
   location: string;
   owner: string;
   details: string;
+  slug: string;
 };
 
 export const columns: ColumnDef<Company>[] = [
@@ -129,21 +161,23 @@ export const columns: ColumnDef<Company>[] = [
       <div className="lowercase">{row.getValue("details")}</div>
     ),
   },
+
   {
     id: "actions",
+    header: () => <div className="">Actions</div>,
     enableHiding: false,
     cell: ({ row }) => {
       return (
-        <div className="flex gap-5">
-          <Button variant="secondary" className="bg-indigo-200 text-indigo-600">
-            Manage
-          </Button>
+        <div className="flex gap-2">
+          <Link href={`company/${row.original.slug}`}>
+            <Button variant="secondary" className="">
+              Manage
+            </Button>
+          </Link>
+
           <Dialog>
             <DialogTrigger asChild>
-              <Button
-                variant="secondary"
-                className="bg-yellow-200 text-yellow-600"
-              >
+              <Button variant="outline" className="">
                 Update
               </Button>
             </DialogTrigger>
@@ -222,7 +256,7 @@ export const columns: ColumnDef<Company>[] = [
               </DialogFooter>
             </DialogContent>
           </Dialog>
-          <Button variant="secondary" className="bg-red-200 text-red-600">
+          <Button variant="destructive" className="">
             Remove
           </Button>
         </div>
