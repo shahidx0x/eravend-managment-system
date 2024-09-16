@@ -14,8 +14,8 @@ jobs:
     env:
       VPS_USER: ${{ secrets.VPS_USER }}
       VPS_IP: ${{ secrets.VPS_IP }}
-      VPS_DEPLOY_PATH: /www/wwwroot/        
-      VPS_PROJECT_PATH: /www/wwwroot/      
+      VPS_DEPLOY_PATH: /www/wwwroot/ems-production        
+      VPS_PROJECT_PATH: /www/wwwroot/ems-production      
 
     steps:
     - name: Checkout code
@@ -48,10 +48,30 @@ jobs:
       run: |
         scp -o StrictHostKeyChecking=no build.tar.gz $VPS_USER@$VPS_IP:$VPS_DEPLOY_PATH
 
-    # - name: Deploy on server
-    #   run: |
-    #     ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_IP bash -c "'
-    #       cd $VPS_PROJECT_PATH
-    #       tar -xzf $VPS_DEPLOY_PATH/build.tar.gz -C .
-    #       # Run additional deployment scripts here
-    #     '"
+    - name: Deploy on server
+      run: |
+        ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_IP bash -c "'
+          cd $VPS_PROJECT_PATH
+          tar -xzf $VPS_DEPLOY_PATH/build.tar.gz -C .
+          
+           mv $VPS_DEPLOY_PATH/build.tar.gz $VPS_PROJECT_PATH
+
+          cd $VPS_PROJECT_PATH
+
+          find . -mindepth 1 -maxdepth 1 ! -name node_modules -exec rm -rf {} +
+
+          tar -xzf build.tar.gz
+
+          rm build.tar.gz
+
+          kill -9 \$(fuser 4000/tcp 2>/dev/null) || true
+
+          SCRIPT_TO_EXECUTE=\"/www/server/nodejs/vhost/scripts/EMS.sh\"
+          if [ -f \"\$SCRIPT_TO_EXECUTE\" ]; then
+            echo \"Executing script: \$SCRIPT_TO_EXECUTE\"
+            bash \"\$SCRIPT_TO_EXECUTE\" > /dev/null
+          else
+            echo \"Script not found: \$SCRIPT_TO_EXECUTE\"
+            exit 1
+          fi
+        '"
