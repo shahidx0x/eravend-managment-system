@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     name: Build and Deploy to VPS
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     environment: CICD
 
     env:
