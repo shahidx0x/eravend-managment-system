@@ -1,4 +1,4 @@
-name: Build and Deploy to VPS on Push to development
+name: Deploy EMS to production
 
 on:
   push:
