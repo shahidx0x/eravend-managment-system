@@ -1,4 +1,4 @@
-name: Deploy to VPS on Push to development
+name: Build and Deploy to VPS on Push to development
 
 on:
   push:
@@ -7,30 +7,51 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to VPS
+    name: Build and Deploy to VPS
     runs-on: ubuntu-latest
     environment: CICD
+
+    env:
+      VPS_USER: ${{ secrets.VPS_USER }}
+      VPS_IP: ${{ secrets.VPS_IP }}
+      VPS_DEPLOY_PATH: /www/wwwroot/        
+      VPS_PROJECT_PATH: /www/wwwroot/      
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
+
+    - name: Install Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16.x'  
+
+    - name: Install pnpm
+      run: npm install -g pnpm
+
+    - name: Install dependencies
+      run: pnpm install
+
+    - name: Build the project
+      run: pnpm build
+
+    - name: Archive build artifacts
+      run: |
+        tar -czf build.tar.gz dist/apps/web
 
     - name: Install SSH key
       uses: webfactory/ssh-agent@v0.5.3
       with:
         ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
 
-    - name: Debug - Verify SSH agent
-      run: ssh-add -l
-
-    - name: Deploy to VPS
+    - name: Copy build to server
       run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} 'bash /www/nxems-ci.sh'
-      env:
-        VPS_USER: ${{ secrets.VPS_USER }}
-        VPS_IP: ${{ secrets.VPS_IP }}
+        scp -o StrictHostKeyChecking=no build.tar.gz $VPS_USER@$VPS_IP:$VPS_DEPLOY_PATH
 
-    - name: Debug - Post-deployment
-      if: always()
-      run: |
-        echo "Deployment step status: ${{ job.status }}"
+    # - name: Deploy on server
+    #   run: |
+    #     ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_IP bash -c "'
+    #       cd $VPS_PROJECT_PATH
+    #       tar -xzf $VPS_DEPLOY_PATH/build.tar.gz -C .
+    #       # Run additional deployment scripts here
+    #     '"
