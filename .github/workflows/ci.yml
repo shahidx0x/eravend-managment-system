@@ -12,8 +12,6 @@ jobs:
     environment: CICD
 
     env:
-      VPS_USER: ${{ secrets.VPS_USER }}
-      VPS_IP: ${{ secrets.VPS_IP }}
       VPS_DEPLOY_PATH: /www/wwwroot/ems-production/
       VPS_PROJECT_PATH: /www/wwwroot/ems-production/
 
@@ -47,43 +45,36 @@ jobs:
 
     - name: Archive build artifacts
       run: |
-        tar -czf build.tar.gz dist/apps/web  # Adjust the path if your build output is different
-
-    - name: Install SSH key
-      uses: webfactory/ssh-agent@v0.5.3
-      with:
-        ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
-
-    - name: Copy build to server
-      run: |
-        scp -o StrictHostKeyChecking=no build.tar.gz $VPS_USER@$VPS_IP:$VPS_DEPLOY_PATH
-
+        tar -czf build.tar.gz dist/apps/web
     - name: Deploy on server
       run: |
-        ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_IP bash -c "'
-          # Navigate to the project directory
-          cd $VPS_PROJECT_PATH
+        # Ensure the deployment directory exists
+        mkdir -p $VPS_DEPLOY_PATH
 
-          # Delete all files and directories except node_modules
-          find . -mindepth 1 -maxdepth 1 ! -name node_modules -exec rm -rf {} +
+        # Move the build archive to the deployment directory
+        mv build.tar.gz $VPS_DEPLOY_PATH
 
-          # Extract the new build
-          tar -xzf $VPS_DEPLOY_PATH/build.tar.gz -C .
+        # Navigate to the project directory
+        cd $VPS_PROJECT_PATH
 
-          # Remove the tar file after extraction (optional)
-          rm $VPS_DEPLOY_PATH/build.tar.gz
+        # Delete all files and directories except node_modules
+        find . -mindepth 1 -maxdepth 1 ! -name node_modules -exec rm -rf {} +
 
-          # Stop any process using port 4000
-          echo \"Stopping process using port 4000...\"
-          kill -9 \$(fuser 4000/tcp 2>/dev/null) || true
+        # Extract the new build
+        tar -xzf build.tar.gz -C .
 
-          # Execute the EMS.sh script
-          SCRIPT_TO_EXECUTE=\"/www/server/nodejs/vhost/scripts/EMS.sh\"
-          if [ -f \"\$SCRIPT_TO_EXECUTE\" ]; then
-            echo \"Executing script: \$SCRIPT_TO_EXECUTE\"
-            bash \"\$SCRIPT_TO_EXECUTE\" > /dev/null
-          else
-            echo \"Script not found: \$SCRIPT_TO_EXECUTE\"
-            exit 1
-          fi
-        '"
+        # Remove the tar file after extraction
+        rm build.tar.gz
+
+        # Stop any process using port 4000
+        kill -9 $(fuser 4000/tcp 2>/dev/null) || true
+
+        # Execute the EMS.sh script
+        SCRIPT_TO_EXECUTE="/www/server/nodejs/vhost/scripts/EMS.sh"
+        if [ -f "$SCRIPT_TO_EXECUTE" ]; then
+          echo "Executing script: $SCRIPT_TO_EXECUTE"
+          bash "$SCRIPT_TO_EXECUTE" > /dev/null
+        else
+          echo "Script not found: $SCRIPT_TO_EXECUTE"
+          exit 1
+        fi
