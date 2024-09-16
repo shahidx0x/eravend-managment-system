@@ -8,26 +8,36 @@ on:
 jobs:
   deploy:
     name: Build and Deploy to VPS
-    runs-on: self-hosted
+    runs-on: self-hosted  
     environment: CICD
 
     env:
       VPS_USER: ${{ secrets.VPS_USER }}
       VPS_IP: ${{ secrets.VPS_IP }}
-      VPS_DEPLOY_PATH: /www/wwwroot/ems-production        
-      VPS_PROJECT_PATH: /www/wwwroot/ems-production      
+      VPS_DEPLOY_PATH: /www/wwwroot/ems-production/
+      VPS_PROJECT_PATH: /www/wwwroot/ems-production/
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Install Node.js
+    - name: Setup Node.js environment
       uses: actions/setup-node@v3
       with:
-        node-version: '20.10.0'  
+        node-version: '20.10.0'
+        cache: 'pnpm'
+        cache-dependency-path: '**/pnpm-lock.yaml'
 
     - name: Install pnpm
       run: npm install -g pnpm
+
+    - name: Cache Next.js build cache
+      uses: actions/cache@v4
+      with:
+        path: ${{ github.workspace }}/apps/web/.next/cache
+        key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
+        restore-keys: |
+          ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-
 
     - name: Install dependencies
       run: pnpm install
@@ -37,7 +47,7 @@ jobs:
 
     - name: Archive build artifacts
       run: |
-        tar -czf build.tar.gz dist/apps/web
+        tar -czf build.tar.gz dist/apps/web  # Adjust the path if your build output is different
 
     - name: Install SSH key
       uses: webfactory/ssh-agent@v0.5.3
@@ -51,21 +61,23 @@ jobs:
     - name: Deploy on server
       run: |
         ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_IP bash -c "'
-          cd $VPS_PROJECT_PATH
-          tar -xzf $VPS_DEPLOY_PATH/build.tar.gz -C .
-          
-           mv $VPS_DEPLOY_PATH/build.tar.gz $VPS_PROJECT_PATH
-
+          # Navigate to the project directory
           cd $VPS_PROJECT_PATH
 
+          # Delete all files and directories except node_modules
           find . -mindepth 1 -maxdepth 1 ! -name node_modules -exec rm -rf {} +
 
-          tar -xzf build.tar.gz
+          # Extract the new build
+          tar -xzf $VPS_DEPLOY_PATH/build.tar.gz -C .
 
-          rm build.tar.gz
+          # Remove the tar file after extraction (optional)
+          rm $VPS_DEPLOY_PATH/build.tar.gz
 
+          # Stop any process using port 4000
+          echo \"Stopping process using port 4000...\"
           kill -9 \$(fuser 4000/tcp 2>/dev/null) || true
 
+          # Execute the EMS.sh script
           SCRIPT_TO_EXECUTE=\"/www/server/nodejs/vhost/scripts/EMS.sh\"
           if [ -f \"\$SCRIPT_TO_EXECUTE\" ]; then
             echo \"Executing script: \$SCRIPT_TO_EXECUTE\"
