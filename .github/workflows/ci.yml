@@ -49,31 +49,31 @@ jobs:
     - name: Deploy on server
       run: |
         # Ensure the deployment directory exists
-        mkdir -p $VPS_DEPLOY_PATH
+        sudo mkdir -p $VPS_DEPLOY_PATH
 
         # Move the build archive to the deployment directory
-        mv build.tar.gz $VPS_DEPLOY_PATH
+        sudo mv build.tar.gz $VPS_DEPLOY_PATH
 
         # Navigate to the project directory
         cd $VPS_PROJECT_PATH
 
         # Delete all files and directories except node_modules
-        find . -mindepth 1 -maxdepth 1 ! -name node_modules -exec rm -rf {} +
+        sudo find . -mindepth 1 -maxdepth 1 ! -name node_modules -exec rm -rf {} +
 
         # Extract the new build
-        tar -xzf build.tar.gz -C .
+        sudo tar -xzf build.tar.gz -C .
 
         # Remove the tar file after extraction
-        rm build.tar.gz
+        sudo rm build.tar.gz
 
         # Stop any process using port 4000
-        kill -9 $(fuser 4000/tcp 2>/dev/null) || true
+        sudo kill -9 $(fuser 4000/tcp 2>/dev/null) || true
 
         # Execute the EMS.sh script
         SCRIPT_TO_EXECUTE="/www/server/nodejs/vhost/scripts/EMS.sh"
         if [ -f "$SCRIPT_TO_EXECUTE" ]; then
           echo "Executing script: $SCRIPT_TO_EXECUTE"
-          bash "$SCRIPT_TO_EXECUTE" > /dev/null
+          sudo bash "$SCRIPT_TO_EXECUTE" > /dev/null
         else
           echo "Script not found: $SCRIPT_TO_EXECUTE"
           exit 1
