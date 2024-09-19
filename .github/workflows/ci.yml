@@ -49,7 +49,7 @@ jobs:
           cd /www/wwwroot/ems-production
           
           # Remove all files except node_modules
-          find . -mindepth 1 ! -name 'node_modules' -exec rm -rf {} +
+          find . -mindepth 1 ! -name 'node_modules' ! -name 'build.tar.gz' -exec rm -rf {} +
           
           # Extract the uploaded tar file
           tar -xzf build.tar.gz
