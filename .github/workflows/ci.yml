@@ -14,7 +14,8 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
-
+    - name: Install pnpm
+      run: npm install -g pnpm
     - name: Setup Node.js environment
       uses: actions/setup-node@v3
       with:
@@ -22,8 +23,6 @@ jobs:
         cache: 'pnpm'
         cache-dependency-path: '**/pnpm-lock.yaml'
 
-    - name: Install pnpm
-      run: npm install -g pnpm
 
     - name: Cache Next.js build cache
       uses: actions/cache@v4
