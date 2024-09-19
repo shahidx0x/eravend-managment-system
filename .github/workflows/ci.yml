@@ -39,7 +39,7 @@ jobs:
 
     - name: Upload build artifacts to VPS
       run: |
-        scp -o StrictHostKeyChecking=no build.tar.gz ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }}:/www/
+        scp -o StrictHostKeyChecking=no build.tar.gz ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }}:/www/wwwroot/ems-production
 
     - name: Deploy to VPS
       run: |
