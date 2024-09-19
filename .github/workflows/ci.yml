@@ -11,13 +11,7 @@ jobs:
     runs-on: ubuntu-latest  
     environment: CICD
 
-    env:
-      VPS_DEPLOY_PATH: '/www/wwwroot/ems-production'
-
     steps:
-    - name: Install pnpm
-      run: npm install -g pnpm
-      
     - name: Checkout code
       uses: actions/checkout@v3
 
@@ -27,6 +21,9 @@ jobs:
         node-version: '20.10.0'
         cache: 'pnpm'
         cache-dependency-path: '**/pnpm-lock.yaml'
+
+    - name: Install pnpm
+      run: npm install -g pnpm
 
     - name: Cache Next.js build cache
       uses: actions/cache@v4
@@ -48,25 +45,25 @@ jobs:
 
     - name: Upload build artifact to VPS
       run: |
-        scp -o StrictHostKeyChecking=no build.tar.gz ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ env.VPS_DEPLOY_PATH }}
+        scp -o StrictHostKeyChecking=no -i ${{ secrets.VPS_SSH_KEY }} build.tar.gz ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }}:/path/to/deploy
 
     - name: SSH into VPS and deploy
       run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
+        ssh -o StrictHostKeyChecking=no -i ${{ secrets.VPS_SSH_KEY }} ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} << 'EOF'
 
         # Ensure the deployment directory exists
-        sudo mkdir -p ${VPS_DEPLOY_PATH}
+        sudo mkdir -p /path/to/deploy
 
         # Navigate to the project directory
-        cd $VPS_PROJECT_PATH
+        cd /path/to/deploy
 
         # Delete all files and directories except node_modules
         sudo find . -mindepth 1 -maxdepth 1 ! -name node_modules -exec rm -rf {} +
 
         # Extract the new build
-        sudo tar -xzf ${VPS_DEPLOY_PATH}/build.tar.gz -C .
+        sudo tar -xzf /path/to/deploy/build.tar.gz -C .
 
         # Remove the tar file after extraction
-        sudo rm ${VPS_DEPLOY_PATH}/build.tar.gz
+        sudo rm /path/to/deploy/build.tar.gz
 
         EOF
