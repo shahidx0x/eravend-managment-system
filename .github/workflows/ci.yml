@@ -8,12 +8,11 @@ on:
 jobs:
   deploy:
     name: Build and Deploy to VPS
-    runs-on: self-hosted  
+    runs-on: ubuntu-latest  
     environment: CICD
 
     env:
-      VPS_DEPLOY_PATH: /www/wwwroot/ems-production/
-      VPS_PROJECT_PATH: /www/wwwroot/ems-production/
+      VPS_DEPLOY_PATH: '/www/wwwroot/ems-production'
 
     steps:
     - name: Checkout code
@@ -46,13 +45,17 @@ jobs:
     - name: Archive build artifacts
       run: |
         tar -czf build.tar.gz dist/apps/web
-    - name: Deploy on server
-      run: |
-        # Ensure the deployment directory exists
-        sudo mkdir -p $VPS_DEPLOY_PATH
 
-        # Move the build archive to the deployment directory
-        sudo mv build.tar.gz $VPS_DEPLOY_PATH
+    - name: Upload build artifact to VPS
+      run: |
+        scp -o StrictHostKeyChecking=no build.tar.gz ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ env.VPS_DEPLOY_PATH }}
+
+    - name: SSH into VPS and deploy
+      run: |
+        ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
+
+        # Ensure the deployment directory exists
+        sudo mkdir -p ${VPS_DEPLOY_PATH}
 
         # Navigate to the project directory
         cd $VPS_PROJECT_PATH
@@ -61,20 +64,9 @@ jobs:
         sudo find . -mindepth 1 -maxdepth 1 ! -name node_modules -exec rm -rf {} +
 
         # Extract the new build
-        sudo tar -xzf build.tar.gz -C .
+        sudo tar -xzf ${VPS_DEPLOY_PATH}/build.tar.gz -C .
 
         # Remove the tar file after extraction
-        sudo rm build.tar.gz
+        sudo rm ${VPS_DEPLOY_PATH}/build.tar.gz
 
-        # Stop any process using port 4000
-        sudo kill -9 $(fuser 4000/tcp 2>/dev/null) || true
-
-        # Execute the EMS.sh script
-        SCRIPT_TO_EXECUTE="/www/server/nodejs/vhost/scripts/EMS.sh"
-        if [ -f "$SCRIPT_TO_EXECUTE" ]; then
-          echo "Executing script: $SCRIPT_TO_EXECUTE"
-          sudo bash "$SCRIPT_TO_EXECUTE" > /dev/null
-        else
-          echo "Script not found: $SCRIPT_TO_EXECUTE"
-          exit 1
-        fi
+        EOF
