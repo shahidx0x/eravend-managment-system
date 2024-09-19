@@ -1,11 +1,11 @@
-name: Test VPS Connection
+name: Test SCP Connection
 
 on:
   workflow_dispatch: # Allows manual triggering of the workflow
 
 jobs:
-  test-vps-connection:
-    name: Test SSH connection to VPS
+  test-scp-connection:
+    name: Test SCP connection to VPS
     runs-on: ubuntu-latest
 
     steps:
@@ -14,9 +14,14 @@ jobs:
         echo "${{ secrets.VPS_KEY }}" | tr -d '\r' > ssh_key
         chmod 600 ssh_key
 
-    - name: Test SSH connection to VPS
-      run: |
-        ssh -o StrictHostKeyChecking=no -i ssh_key ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} "echo 'Connected to VPS successfully!'"
+    - name: Create a test file
+      run: echo "This is a test file" > test_file.txt
 
-    - name: Cleanup SSH key
-      run: rm ssh_key
+    - name: Test SCP connection to VPS
+      run: |
+        scp -o StrictHostKeyChecking=no -i ssh_key test_file.txt ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }}:/tmp/
+
+    - name: Cleanup SSH key and test file
+      run: |
+        rm ssh_key
+        rm test_file.txt
