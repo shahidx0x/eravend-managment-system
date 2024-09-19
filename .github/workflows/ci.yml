@@ -43,10 +43,13 @@ jobs:
     - name: Deploy to VPS
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} << EOF
+          kill -9 $(fuser 4000/tcp 2>/dev/null)
           cd /www/wwwroot/ems-production
           find . -mindepth 1 ! -name 'node_modules' ! -name 'build.tar.gz' -exec rm -rf {} +
           tar -xzf build.tar.gz
           rm build.tar.gz
+          SCRIPT_TO_EXECUTE="/www/server/nodejs/vhost/scripts/EMS.sh"
+          bash "$SCRIPT_TO_EXECUTE" > /dev/null
         EOF
       env:
         VPS_USER: ${{ secrets.VPS_USER }}
