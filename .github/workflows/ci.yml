@@ -1,68 +1,22 @@
-name: Deploy EMS to production
+name: Test VPS Connection
 
 on:
-  push:
-    branches:
-      - development
+  workflow_dispatch: # Allows manual triggering of the workflow
 
 jobs:
-  deploy:
-    name: Build and Deploy to VPS
-    runs-on: ubuntu-latest  
-    environment: CICD
+  test-vps-connection:
+    name: Test SSH connection to VPS
+    runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-    - name: Install pnpm
-      run: npm install -g pnpm
-    - name: Setup Node.js environment
-      uses: actions/setup-node@v3
-      with:
-        node-version: '20.10.0'
-        cache: 'pnpm'
-        cache-dependency-path: '**/pnpm-lock.yaml'
-
-
-    - name: Cache Next.js build cache
-      uses: actions/cache@v4
-      with:
-        path: ${{ github.workspace }}/apps/web/.next/cache
-        key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
-        restore-keys: |
-          ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-
-
-    - name: Install dependencies
-      run: pnpm install
-
-    - name: Build the project
-      run: pnpm build
-
-    - name: Archive build artifacts
+    - name: Create SSH key file
       run: |
-        tar -czf build.tar.gz dist/apps/web
+        echo "${{ secrets.VPS_KEY }}" | tr -d '\r' > ssh_key
+        chmod 600 ssh_key
 
-    - name: Upload build artifact to VPS
+    - name: Test SSH connection to VPS
       run: |
-        scp -o StrictHostKeyChecking=no -i ${{ secrets.VPS_SSH_KEY }} build.tar.gz ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }}:/www/
+        ssh -o StrictHostKeyChecking=no -i ssh_key ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} "echo 'Connected to VPS successfully!'"
 
-    # - name: SSH into VPS and deploy
-    #   run: |
-    #     ssh -o StrictHostKeyChecking=no -i ${{ secrets.VPS_SSH_KEY }} ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} << 'EOF'
-
-    #     # Ensure the deployment directory exists
-    #     sudo mkdir -p /www/wwwroot/ems-production
-
-    #     # Navigate to the project directory
-    #     cd /www/wwwroot/ems-production
-
-    #     # Delete all files and directories except node_modules
-    #     sudo find . -mindepth 1 -maxdepth 1 ! -name node_modules -exec rm -rf {} +
-
-    #     # Extract the new build
-    #     sudo tar -xzf /path/to/deploy/build.tar.gz -C .
-
-    #     # Remove the tar file after extraction
-    #     sudo rm /path/to/deploy/build.tar.gz
-
-    #     EOF
+    - name: Cleanup SSH key
+      run: rm ssh_key
