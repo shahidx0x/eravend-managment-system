@@ -35,7 +35,7 @@ jobs:
       run: ssh-add -l
 
     - name: Archive build artifacts
-      run: tar -czf build.tar.gz dist/apps/web/
+      run: cd dist/apps/web && tar -czf ../../build.tar.gz
 
     - name: Upload build artifacts to VPS
       run: |
