@@ -12,11 +12,13 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
+      
 
     - name: Install Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '20.10.0'
+        
     - name: Install PNPM
       run: npm i -g pnpm
 
@@ -43,7 +45,18 @@ jobs:
 
     - name: Deploy to VPS
       run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} 'bash /www/nxems-ci.sh'
+        ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} << EOF
+          cd /www/wwwroot/ems-production
+          
+          # Remove all files except node_modules
+          find . -mindepth 1 ! -name 'node_modules' -exec rm -rf {} +
+          
+          # Extract the uploaded tar file
+          tar -xzf build.tar.gz
+          
+          # Remove the tar file after extraction
+          rm build.tar.gz
+        EOF
       env:
         VPS_USER: ${{ secrets.VPS_USER }}
         VPS_IP: ${{ secrets.VPS_IP }}
