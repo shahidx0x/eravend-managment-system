@@ -44,25 +44,25 @@ jobs:
 
     - name: Upload build artifact to VPS
       run: |
-        scp -o StrictHostKeyChecking=no -i ${{ secrets.VPS_SSH_KEY }} build.tar.gz ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }}:/path/to/deploy
+        scp -o StrictHostKeyChecking=no -i ${{ secrets.VPS_SSH_KEY }} build.tar.gz ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }}:/www/wwwroot/ems-production/
 
-    - name: SSH into VPS and deploy
-      run: |
-        ssh -o StrictHostKeyChecking=no -i ${{ secrets.VPS_SSH_KEY }} ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} << 'EOF'
+    # - name: SSH into VPS and deploy
+    #   run: |
+    #     ssh -o StrictHostKeyChecking=no -i ${{ secrets.VPS_SSH_KEY }} ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} << 'EOF'
 
-        # Ensure the deployment directory exists
-        sudo mkdir -p /path/to/deploy
+    #     # Ensure the deployment directory exists
+    #     sudo mkdir -p /www/wwwroot/ems-production
 
-        # Navigate to the project directory
-        cd /path/to/deploy
+    #     # Navigate to the project directory
+    #     cd /www/wwwroot/ems-production
 
-        # Delete all files and directories except node_modules
-        sudo find . -mindepth 1 -maxdepth 1 ! -name node_modules -exec rm -rf {} +
+    #     # Delete all files and directories except node_modules
+    #     sudo find . -mindepth 1 -maxdepth 1 ! -name node_modules -exec rm -rf {} +
 
-        # Extract the new build
-        sudo tar -xzf /path/to/deploy/build.tar.gz -C .
+    #     # Extract the new build
+    #     sudo tar -xzf /path/to/deploy/build.tar.gz -C .
 
-        # Remove the tar file after extraction
-        sudo rm /path/to/deploy/build.tar.gz
+    #     # Remove the tar file after extraction
+    #     sudo rm /path/to/deploy/build.tar.gz
 
-        EOF
+    #     EOF
