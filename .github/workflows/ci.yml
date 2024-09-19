@@ -52,7 +52,7 @@ jobs:
           echo 'Files on position'
           kill -9 $(fuser 4000/tcp 2>/dev/null)
           echo 'Restarting services'
-          bash /www/server/nodejs/vhost/scripts/EMS.sh > /dev/null
+          bash /www/server/nodejs/vhost/scripts/emsProduction.sh > /dev/null
         EOF
       env:
         VPS_USER: ${{ secrets.VPS_USER }}
