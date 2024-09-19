@@ -17,12 +17,14 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '20.10.0'
+    - name: Install PNPM
+      run: npm i -g pnpm
 
     - name: Install dependencies
-      run: npm install
+      run: pnpm install
 
     - name: Build the project
-      run: npm run build
+      run: pnpm run build
 
     - name: Install SSH key
       uses: webfactory/ssh-agent@v0.5.3
