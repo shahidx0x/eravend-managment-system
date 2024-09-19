@@ -45,13 +45,11 @@ jobs:
     - name: Deploy to VPS
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} << EOF
+          kill -9 $(fuser 4000/tcp 2>/dev/null)
           cd /www/wwwroot/ems-production
-          find . -mindepth 1 ! -name 'node_modules' ! -name 'build.tar.gz' -exec rm -rf {} +
+          find . -mindepth 1 -not -path './node_modules*' -not -name 'build.tar.gz' -exec rm -rf {} +
           tar -xzf build.tar.gz
           rm build.tar.gz
-          echo 'Files on position'
-          kill -9 $(fuser 4000/tcp 2>/dev/null)
-          echo 'Restarting services'
           bash /www/server/nodejs/vhost/scripts/emsProduction.sh > /dev/null
         EOF
       env:
