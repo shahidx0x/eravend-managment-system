@@ -1,27 +1,37 @@
-name: Test SCP Connection
+
+name: Deploy to VPS on Push to development
 
 on:
-  workflow_dispatch: # Allows manual triggering of the workflow
+  push:
+    branches:
+      - development
 
 jobs:
-  test-scp-connection:
-    name: Test SCP connection to VPS
+  deploy:
+    name: Deploy to VPS
     runs-on: ubuntu-latest
+    environment: CICD
 
     steps:
-    - name: Create SSH key file
-      run: |
-        echo "${{ secrets.VPS_KEY }}" | tr -d '\r' > ssh_key
-        chmod 600 ssh_key
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-    - name: Create a test file
-      run: echo "This is a test file" > test_file.txt
+    - name: Install SSH key
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.VPS_KEY }}
 
-    - name: Test SCP connection to VPS
-      run: |
-        scp -o StrictHostKeyChecking=no -i ssh_key test_file.txt ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }}:/tmp/
+    - name: Debug - Verify SSH agent
+      run: ssh-add -l
 
-    - name: Cleanup SSH key and test file
+    - name: Deploy to VPS
       run: |
-        rm ssh_key
-        rm test_file.txt
+        ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} 'bash /www/nxems-ci.sh'
+      env:
+        VPS_USER: ${{ secrets.VPS_USER }}
+        VPS_IP: ${{ secrets.VPS_IP }}
+
+    - name: Debug - Post-deployment
+      if: always()
+      run: |
+        echo "Deployment step status: ${{ job.status }}"
