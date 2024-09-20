@@ -14,7 +14,6 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
-      
 
     - name: Install Node.js
       uses: actions/setup-node@v3
@@ -49,8 +48,35 @@ jobs:
           find . -mindepth 1 -not -path './node_modules*' -not -name 'build.tar.gz' -exec rm -rf {} +
           tar -xzf build.tar.gz
           rm build.tar.gz
-          kill -9 $(fuser 4000/tcp)
-          yarn start --port 4000
+          
+          # Stop the existing process
+          pid=$(lsof -t -i:4000)
+          if [ ! -z "$pid" ]; then
+            echo "Stopping process on port 4000"
+            sudo kill -15 $pid
+            sleep 5
+            if kill -0 $pid 2>/dev/null; then
+              echo "Process did not stop gracefully, force killing"
+              sudo kill -9 $pid
+            fi
+          else
+            echo "No process found on port 4000"
+          fi
+          
+          # Start the new process
+          echo "Starting new process"
+          nohup yarn start --port 4000 > /www/server/nodejs/vhost/logs/ems-prod.log 2>&1 &
+          echo $! > /www/server/nodejs/vhost/pids/ems-prod.pid
+          sleep 5
+          
+          # Check if the new process is running
+          if kill -0 $(cat /www/server/nodejs/vhost/pids/ems-prod.pid) 2>/dev/null; then
+            echo "New process started successfully"
+          else
+            echo "Failed to start new process"
+            cat /www/server/nodejs/vhost/pids/ems-prod.pid
+            exit 1
+          fi
         EOF
       env:
         VPS_USER: ${{ secrets.VPS_USER }}
