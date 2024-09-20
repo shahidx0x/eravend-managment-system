@@ -25,7 +25,7 @@ const Login = () => {
         <div className="flex h-full min-h-screen flex-col-reverse items-center justify-center gap-8 py-8 md:flex-row [&>*]:flex-1">
           <div className="w-full md:w-auto">
             <h2 className="mb-4 text-center text-3xl font-semibold text-indigo-500 lg:text-6xl">
-              WELCOME
+              WELCOME TOOOO
             </h2>
             <Image
               src={eravendLogo}
