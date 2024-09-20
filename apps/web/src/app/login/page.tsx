@@ -17,7 +17,6 @@ const Login = () => {
   const router = useRouter();
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-
     router.push("/dashboard/company");
   };
   return (
