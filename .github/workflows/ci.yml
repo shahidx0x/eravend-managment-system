@@ -1,9 +1,7 @@
-name: Deploy to VPS on Push to development
+name: Deploy to Eravend Server
 
 on:
-  push: 
-    branches:
-      - development
+  workflow_call: 
 
 jobs:
   deploy:
