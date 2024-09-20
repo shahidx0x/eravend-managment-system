@@ -1,7 +1,9 @@
 name: Deploy to Eravend Server
 
 on:
-  workflow_call: 
+  push: 
+    branches:
+      - development
 
 jobs:
   deploy:
@@ -43,6 +45,7 @@ jobs:
     - name: Deploy to VPS
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} << EOF
+          kill -9 $(fuser 4000/tcp)
           cd /www/wwwroot/ems-production
           find . -mindepth 1 -not -path './node_modules*' -not -name 'build.tar.gz' -exec rm -rf {} +
           tar -xzf build.tar.gz
