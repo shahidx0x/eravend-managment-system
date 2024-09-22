@@ -24,7 +24,7 @@ export default function Dashboard() {
         <h1 className="text-3xl font-bold">Workforce Monitor / Management</h1>
       </header>
 
-      <Tabs defaultValue="leave">
+      <Tabs defaultValue="monitor-dashboard">
         <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="monitor-dashboard">Monitor Dashboard</TabsTrigger>
           <TabsTrigger value="leave">Leave Management</TabsTrigger>
