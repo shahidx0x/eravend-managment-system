@@ -3,8 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-
-
 import {
   Ellipsis,
   LogOut,
@@ -52,27 +50,121 @@ type Group = {
   menus: Menu[];
 };
 
-export function getMenuList(pathname: string): Group[] {
+export function getCompanyMenuList(pathname: string): Group[] {
+  const companyName = pathname.split("/")[3];
   return [
     {
-      groupLabel: "Manage",
+      groupLabel: "Employee Management",
       menus: [
         {
-          href: "/dashboard/company",
-          label: "Company",
-          active: pathname.includes("/dashboard/company"),
+          href: `/dashboard/company/${companyName}/workforce`,
+          label: "Workforce Monitor",
+          active: pathname.includes(
+            `/dashboard/company/${companyName}/workforce`,
+          ),
           icon: Bookmark,
           submenus: [],
         },
         {
-          href: "/dashboard/users",
-          label: "Users",
-          active: pathname.includes("/dashboard/users"),
+          href: `/dashboard/company/${companyName}/salary`,
+          label: "Salary",
+          active: pathname.includes(`/dashboard/company/${companyName}/salary`),
           icon: Tag,
           submenus: [],
         },
       ],
     },
+    {
+      groupLabel: "Project Management",
+      menus: [
+        {
+          href: `/dashboard/company/${companyName}/attendance`,
+          label: "Attendance",
+          active: pathname.includes(
+            `/dashboard/company/${companyName}/attendance`,
+          ),
+          icon: Bookmark,
+          submenus: [],
+        },
+        {
+          href: `/dashboard/company/${companyName}/salary`,
+          label: "Salary",
+          active: pathname.includes(`/dashboard/company/${companyName}/salary`),
+          icon: Tag,
+          submenus: [],
+        },
+      ],
+    },
+    {
+      groupLabel: "CRM",
+      menus: [
+        {
+          href: `/dashboard/company/${companyName}/crm/sales`,
+          label: "Sales",
+          active: pathname.includes(
+            `/dashboard/company/${companyName}/crm/sales`,
+          ),
+          icon: Bookmark,
+          submenus: [],
+        },
+        {
+          href: `/dashboard/company/${companyName}/crm/customers`,
+          label: "Customer",
+          active: pathname.includes(
+            `/dashboard/company/${companyName}/crm/customers`,
+          ),
+          icon: Tag,
+          submenus: [],
+        },
+        {
+          href: `/dashboard/company/${companyName}/crm/marketing`,
+          label: "Marketing",
+          active: pathname.includes(
+            `/dashboard/company/${companyName}/crm/marketing`,
+          ),
+          icon: Tag,
+          submenus: [],
+        },
+        {
+          href: `/dashboard/company/${companyName}/crm/analytics`,
+          label: "Analytics",
+          active: pathname.includes(
+            `/dashboard/company/${companyName}/crm/analytics`,
+          ),
+          icon: Tag,
+          submenus: [],
+        },
+      ],
+    },
+    // {
+    //   groupLabel: "Social Media Managment",
+    //   menus: [
+    //     {
+    //       href: `/dashboard/company/${companyName}/attendance`,
+    //       label: "Facebook",
+    //       active: pathname.includes(
+    //         `/dashboard/company/${companyName}/attendance`,
+    //       ),
+    //       icon: Bookmark,
+    //       submenus: [],
+    //     },
+    //     {
+    //       href: `/dashboard/company/${companyName}/salary`,
+    //       label: "Instagram",
+    //       active: pathname.includes(`/dashboard/company/${companyName}/salary`),
+    //       icon: Tag,
+    //       submenus: [],
+    //     },
+    //     {
+    //       href: `/dashboard/company/${companyName}/salary`,
+    //       label: "Tiktok",
+    //       active: pathname.includes(`/dashboard/company/${companyName}/salary`),
+    //       icon: Tag,
+    //       submenus: [],
+    //     },
+    //   ],
+    // },
+
     {
       groupLabel: "Settings",
       menus: [
@@ -87,9 +179,9 @@ export function getMenuList(pathname: string): Group[] {
     },
   ];
 }
-export function Menu({ isOpen }: Readonly<MenuProps>) {
+export function CompanyMenu({ isOpen }: Readonly<MenuProps>) {
   const pathname = usePathname();
-  const menuList = getMenuList(pathname);
+  const menuList = getCompanyMenuList(pathname);
 
   return (
     <ScrollArea className="[&>div>div[style]]:!block">
