@@ -2,154 +2,216 @@
 
 import { useState } from "react";
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-  Button,
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  Input,
-  Label,
-} from "@nx-next-shadcn/shadcn";
+
+
+import { PlusIcon, Search, SearchIcon } from "lucide-react";
+
+
+
+import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Input, Label, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@nx-next-shadcn/shadcn";
+
+
+interface Employee {
+  id: number;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  role: string;
+  status: "active" | "blocked";
+}
 
 export default function EmployeeManagement() {
-  const [employees, setEmployees] = useState([
+  const [employees, setEmployees] = useState<Employee[]>([
     {
       id: 1,
-      name: "John Doe",
-      email: "john@example.com",
-      role: "Developer",
-      status: "Active",
+      name: "Alice Johnson",
+      email: "alice.johnson@example.com",
+      phoneNumber: "123-456-7890",
+      role: "Manager",
+      status: "active",
     },
     {
       id: 2,
-      name: "Jane Smith",
-      email: "jane@example.com",
+      name: "Bob Smith",
+      email: "bob.smith@example.com",
+      phoneNumber: "098-765-4321",
+      role: "Developer",
+      status: "blocked",
+    },
+    {
+      id: 3,
+      name: "Charlie Brown",
+      email: "charlie.brown@example.com",
+      phoneNumber: "456-789-1230",
       role: "Designer",
-      status: "Active",
+      status: "active",
     },
   ]);
 
-  const [newEmployee, setNewEmployee] = useState({
+  const [roles, setRoles] = useState<string[]>([
+    "Manager",
+    "Developer",
+    "Designer",
+  ]);
+  const [newEmployee, setNewEmployee] = useState<
+    Omit<Employee, "id" | "status">
+  >({
     name: "",
     email: "",
+    phoneNumber: "",
     role: "",
   });
 
-  const handleAddEmployee = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const addEmployee = () => {
     setEmployees([
       ...employees,
-      { ...newEmployee, id: employees.length + 1, status: "Active" },
+      { ...newEmployee, id: employees.length + 1, status: "active" },
     ]);
-    setNewEmployee({ name: "", email: "", role: "" });
+    setNewEmployee({ name: "", email: "", phoneNumber: "", role: "" });
   };
 
-  const handleDeactivate = (id: number) => {
+  const toggleEmployeeStatus = (id: number) => {
     setEmployees(
-      employees.map((employee) =>
-        employee.id === id ? { ...employee, status: "Inactive" } : employee,
+      employees.map((emp) =>
+        emp.id === id
+          ? { ...emp, status: emp.status === "active" ? "blocked" : "active" }
+          : emp,
       ),
     );
   };
 
+  const filteredEmployees = employees.filter((emp) =>
+    emp.email.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
+
   return (
-    <div>
-      <h2 className="mb-4 text-2xl font-bold">Employee Management</h2>
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button className="mb-4">Add New Employee</Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Add New Employee</DialogTitle>
-            <DialogDescription>
-              Enter the details of the new employee here. Click save when youre
-              done.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Name
-              </Label>
-              <Input
-                id="name"
-                value={newEmployee.name}
-                onChange={(e) =>
-                  setNewEmployee({ ...newEmployee, name: e.target.value })
-                }
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="email" className="text-right">
-                Email
-              </Label>
-              <Input
-                id="email"
-                value={newEmployee.email}
-                onChange={(e) =>
-                  setNewEmployee({ ...newEmployee, email: e.target.value })
-                }
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="role" className="text-right">
-                Role
-              </Label>
-              <Input
-                id="role"
-                value={newEmployee.role}
-                onChange={(e) =>
-                  setNewEmployee({ ...newEmployee, role: e.target.value })
-                }
-                className="col-span-3"
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button type="submit" onClick={handleAddEmployee}>
-              Add Employee
+    <div className="container mx-auto p-4">
+      <h1 className="mb-4 text-2xl font-bold">Employee Management</h1>
+
+      <div className="mb-4 flex justify-between">
+        <div className="mb-4 flex w-full items-center">
+          <Search className="mr-2 h-5 w-5 text-gray-400" />
+          <Input
+            type="text"
+            placeholder="Search by email"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full max-w-sm"
+          />
+        </div>
+
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button>
+              <PlusIcon className="mr-2 h-4 w-4" /> Add Employee
             </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Add New Employee</DialogTitle>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="name" className="text-right">
+                  Name
+                </Label>
+                <Input
+                  id="name"
+                  value={newEmployee.name}
+                  onChange={(e) =>
+                    setNewEmployee({ ...newEmployee, name: e.target.value })
+                  }
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="email" className="text-right">
+                  Email
+                </Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={newEmployee.email}
+                  onChange={(e) =>
+                    setNewEmployee({ ...newEmployee, email: e.target.value })
+                  }
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="phone" className="text-right">
+                  Phone
+                </Label>
+                <Input
+                  id="phone"
+                  type="tel"
+                  value={newEmployee.phoneNumber}
+                  onChange={(e) =>
+                    setNewEmployee({
+                      ...newEmployee,
+                      phoneNumber: e.target.value,
+                    })
+                  }
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="role" className="text-right">
+                  Role
+                </Label>
+                <Select
+                  onValueChange={(value) =>
+                    setNewEmployee({ ...newEmployee, role: value })
+                  }
+                >
+                  <SelectTrigger className="col-span-3">
+                    <SelectValue placeholder="Select a role" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {roles.map((role) => (
+                      <SelectItem key={role} value={role}>
+                        {role}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <Button onClick={addEmployee}>Save Employee</Button>
+          </DialogContent>
+        </Dialog>
+      </div>
+
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead>Name</TableHead>
             <TableHead>Email</TableHead>
+            <TableHead>Phone Number</TableHead>
             <TableHead>Role</TableHead>
             <TableHead>Status</TableHead>
-            <TableHead>Actions</TableHead>
+            <TableHead>Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {employees.map((employee) => (
+          {filteredEmployees.map((employee) => (
             <TableRow key={employee.id}>
               <TableCell>{employee.name}</TableCell>
               <TableCell>{employee.email}</TableCell>
+              <TableCell>{employee.phoneNumber}</TableCell>
               <TableCell>{employee.role}</TableCell>
               <TableCell>{employee.status}</TableCell>
               <TableCell>
-                {employee.status === "Active" && (
-                  <Button
-                    onClick={() => handleDeactivate(employee.id)}
-                    variant="destructive"
-                  >
-                    Deactivate
-                  </Button>
-                )}
+                <Button
+                  onClick={() => toggleEmployeeStatus(employee.id)}
+                  variant={
+                    employee.status === "active" ? "destructive" : "default"
+                  }
+                >
+                  {employee.status === "active" ? "Block" : "Unblock"}
+                </Button>
               </TableCell>
             </TableRow>
           ))}

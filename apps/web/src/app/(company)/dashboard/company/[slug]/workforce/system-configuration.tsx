@@ -31,6 +31,11 @@ export default function SystemConfiguration() {
     "Illness",
     "Absent",
   ]);
+  const [roles, setRoles] = useState([
+    "Marketing",
+    "Sales",
+    "Developer",
+  ]);
 
   const handleAddHoliday = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -100,7 +105,40 @@ export default function SystemConfiguration() {
             <Button>Save Working Hours</Button>
           </CardFooter>
         </Card>
-
+        <Card className="min-w-[300px] flex-1">
+          <CardHeader>
+            <CardTitle>Add Role</CardTitle>
+            <CardDescription>
+              Manage different Role
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form
+              onSubmit={handleAddStatusType}
+              className="mb-4 flex space-x-2"
+            >
+              <Input name="role" placeholder="New Status Type" />
+              <Button type="submit">Add</Button>
+            </form>
+            <ul className="space-y-2">
+              {roles.map((role, index) => (
+                <li key={index} className="flex items-center justify-between">
+                  <span>{role}</span>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() =>
+                      setRoles(roles.filter((_, i) => i !== index))
+                    }
+                  >
+                    Remove
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+{/* 
         <Card className="min-w-[300px] flex-1">
           <CardHeader>
             <CardTitle>Holidays</CardTitle>
@@ -130,7 +168,7 @@ export default function SystemConfiguration() {
               ))}
             </ul>
           </CardContent>
-        </Card>
+        </Card> */}
 
         <Card className="min-w-[300px] flex-1">
           <CardHeader>
@@ -196,6 +234,7 @@ export default function SystemConfiguration() {
             </ul>
           </CardContent>
         </Card>
+    
       </div>
     </div>
   );

@@ -25,7 +25,6 @@ export default function DashboardLayout({
           <main className="mx-10 my-10 h-full rounded-md bg-white shadow-sm dark:bg-[#09090b]">
             {children}
           </main>
-          <Footer />
         </div>
       </body>
     </html>

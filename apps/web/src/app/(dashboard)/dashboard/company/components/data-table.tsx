@@ -2,52 +2,20 @@
 
 import * as React from "react";
 
+
+
 import Image from "next/image";
 import Link from "next/link";
 
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
 
-import { Label, Textarea } from "@nx-next-shadcn/shadcn";
-import { Button, cn } from "@nx-next-shadcn/shadcn";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@nx-next-shadcn/shadcn";
-import { Input } from "@nx-next-shadcn/shadcn";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@nx-next-shadcn/shadcn";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@nx-next-shadcn/shadcn";
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
+
+import { ArrowUpDown, ChevronDown } from "lucide-react";
+
+
+
+import { Label, Textarea, Button, DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger, Input, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@nx-next-shadcn/shadcn";
+import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
+
 
 const data: Company[] = [
   {

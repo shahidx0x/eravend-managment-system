@@ -3,17 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import {
-  Ellipsis,
-  LogOut,
-  Tag,
-  Users,
-  Settings,
-  Bookmark,
-  SquarePen,
-  LayoutGrid,
-  LucideIcon,
-} from "lucide-react";
+
+
+import { Ellipsis, Tag, Users, Bookmark, LucideIcon } from "lucide-react";
 
 import {
   Button,
@@ -26,6 +18,7 @@ import {
 } from "@nx-next-shadcn/shadcn";
 
 import { CollapseMenuButton } from "./collaps-menu-button";
+
 
 interface MenuProps {
   isOpen: boolean | undefined;

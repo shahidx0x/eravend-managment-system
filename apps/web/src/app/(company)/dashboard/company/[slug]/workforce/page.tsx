@@ -29,7 +29,7 @@ export default function Dashboard() {
           <TabsTrigger value="monitor-dashboard">Monitor Dashboard</TabsTrigger>
           <TabsTrigger value="leave">Leave Management</TabsTrigger>
           <TabsTrigger value="attendance">Attendance Monitoring</TabsTrigger>
-          {/* <TabsTrigger value="employees">Employee Management</TabsTrigger> */}
+          <TabsTrigger value="employees">Employee Management</TabsTrigger>
           <TabsTrigger value="config">System Configuration</TabsTrigger>
         </TabsList>
         <TabsContent value="monitor-dashboard">
@@ -41,9 +41,9 @@ export default function Dashboard() {
         <TabsContent value="attendance">
           <AttendanceMonitoring />
         </TabsContent>
-        {/* <TabsContent value="employees">
+        <TabsContent value="employees">
           <EmployeeManagement />
-        </TabsContent> */}
+        </TabsContent>
         <TabsContent value="config">
           <SystemConfiguration />
         </TabsContent>
