@@ -47,6 +47,20 @@ export function getCompanyMenuList(pathname: string): Group[] {
   const companyName = pathname.split("/")[3];
   return [
     {
+      groupLabel: "Employee Dashboard",
+      menus: [
+        {
+          href: `/dashboard/company/${companyName}/employee/dashboard`,
+          label: "Dashboard",
+          active: pathname.includes(
+            `/dashboard/company/${companyName}/employee/dashboard`,
+          ),
+          icon: Bookmark,
+          submenus: [],
+        },
+      ],
+    },
+    {
       groupLabel: "Employee Management",
       menus: [
         {
