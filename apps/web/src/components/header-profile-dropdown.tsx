@@ -32,7 +32,7 @@ export function UserDropDown() {
               <Button
                 variant="outline"
                 size="icon"
-                className="relative h-8 w-8 rounded-full"
+                className="relative h-10 w-10 rounded-full"
               >
                 <Avatar className="h-8 w-8">
                   <AvatarImage src="#" alt="Avatar" />
@@ -57,13 +57,13 @@ export function UserDropDown() {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem className="hover:cursor-pointer" asChild>
-            <Link href="/dashboard" className="flex items-center">
+            <Link href="/dashboard/company" className="flex items-center">
               <LayoutGrid className="text-muted-foreground mr-3 h-4 w-4" />
               Dashboard
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem className="hover:cursor-pointer" asChild>
-            <Link href="/account" className="flex items-center">
+            <Link href="/dashboard/user-profile" className="flex items-center">
               <User className="text-muted-foreground mr-3 h-4 w-4" />
               Account
             </Link>

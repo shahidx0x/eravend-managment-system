@@ -10,10 +10,10 @@ interface navProps {
 const HeaderNav = ({ title }: navProps) => {
   return (
     <header className="flex h-20 justify-between bg-white shadow-sm dark:bg-[#09090b]">
-      <div className="mx-10 flex items-center text-xl font-bold">
+      <div className="mx-12 flex items-center text-xl font-bold">
         <p>{title}</p>
       </div>
-      <div className="center mx-10 gap-5">
+      <div className="center mx-10 gap-4">
         <ModeToggle />
         <UserDropDown />
       </div>
