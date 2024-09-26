@@ -3,8 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-
-
 import { Ellipsis, Tag, Users, Bookmark, LucideIcon } from "lucide-react";
 
 import {
@@ -18,7 +16,6 @@ import {
 } from "@nx-next-shadcn/shadcn";
 
 import { CollapseMenuButton } from "./collaps-menu-button";
-
 
 interface MenuProps {
   isOpen: boolean | undefined;
@@ -81,27 +78,27 @@ export function getCompanyMenuList(pathname: string): Group[] {
         },
       ],
     },
-    {
-      groupLabel: "Project Management",
-      menus: [
-        {
-          href: `/dashboard/company/${companyName}/attendance`,
-          label: "Attendance",
-          active: pathname.includes(
-            `/dashboard/company/${companyName}/attendance`,
-          ),
-          icon: Bookmark,
-          submenus: [],
-        },
-        {
-          href: `/dashboard/company/${companyName}/salary`,
-          label: "Salary",
-          active: pathname.includes(`/dashboard/company/${companyName}/salary`),
-          icon: Tag,
-          submenus: [],
-        },
-      ],
-    },
+    // {
+    //   groupLabel: "Project Management",
+    //   menus: [
+    //     {
+    //       href: `/dashboard/company/${companyName}/attendance`,
+    //       label: "Attendance",
+    //       active: pathname.includes(
+    //         `/dashboard/company/${companyName}/attendance`,
+    //       ),
+    //       icon: Bookmark,
+    //       submenus: [],
+    //     },
+    //     {
+    //       href: `/dashboard/company/${companyName}/salary`,
+    //       label: "Salary",
+    //       active: pathname.includes(`/dashboard/company/${companyName}/salary`),
+    //       icon: Tag,
+    //       submenus: [],
+    //     },
+    //   ],
+    // },
     {
       groupLabel: "CRM",
       menus: [
@@ -139,47 +136,6 @@ export function getCompanyMenuList(pathname: string): Group[] {
             `/dashboard/company/${companyName}/crm/analytics`,
           ),
           icon: Tag,
-          submenus: [],
-        },
-      ],
-    },
-    // {
-    //   groupLabel: "Social Media Managment",
-    //   menus: [
-    //     {
-    //       href: `/dashboard/company/${companyName}/attendance`,
-    //       label: "Facebook",
-    //       active: pathname.includes(
-    //         `/dashboard/company/${companyName}/attendance`,
-    //       ),
-    //       icon: Bookmark,
-    //       submenus: [],
-    //     },
-    //     {
-    //       href: `/dashboard/company/${companyName}/salary`,
-    //       label: "Instagram",
-    //       active: pathname.includes(`/dashboard/company/${companyName}/salary`),
-    //       icon: Tag,
-    //       submenus: [],
-    //     },
-    //     {
-    //       href: `/dashboard/company/${companyName}/salary`,
-    //       label: "Tiktok",
-    //       active: pathname.includes(`/dashboard/company/${companyName}/salary`),
-    //       icon: Tag,
-    //       submenus: [],
-    //     },
-    //   ],
-    // },
-
-    {
-      groupLabel: "Settings",
-      menus: [
-        {
-          href: "/dashboard/user-profile",
-          label: "Account",
-          active: pathname.includes("/dashboard/user-profile"),
-          icon: Users,
           submenus: [],
         },
       ],

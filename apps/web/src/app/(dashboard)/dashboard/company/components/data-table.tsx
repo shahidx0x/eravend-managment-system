@@ -137,7 +137,7 @@ export const columns: ColumnDef<Company>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex gap-2">
-          <Link href={`company/${row.original.slug}/workforce`}>
+          <Link href={`company/${row.original.slug}/employee/dashboard`}>
             <Button variant="secondary" className="">
               Manage
             </Button>
