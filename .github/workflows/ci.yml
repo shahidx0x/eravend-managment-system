@@ -29,22 +29,21 @@ jobs:
     - name: Build the project
       run: pnpm run build
 
-    - name: Install SSH key
-      uses: webfactory/ssh-agent@v0.5.3
-      with:
-        ssh-private-key: ${{ secrets.VPS_KEY }}
+    - name: Install sshpass
+      run: sudo apt-get install sshpass
 
     - name: Archive build artifacts
       run: tar -czf build.tar.gz -C dist/apps/web .
 
     - name: Upload build artifacts to VPS
       run: |
-        scp -o StrictHostKeyChecking=no build.tar.gz ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }}:/www/wwwroot/ems-production
+        sshpass -p "${{ secrets.VPS_KEY }}" scp -P 1076 -o StrictHostKeyChecking=no build.tar.gz ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }}:/home/shahid/ems-production
 
-    - name: Deploy to VPS
+    - name: Deploy to VPS with elevated permissions
       run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} << EOF
-          cd /www/wwwroot/ems-production
+        sshpass -p "${{ secrets.VPS_KEY }}" ssh -p 1076 -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} << EOF
+          sudo su - shahid
+          cd /home/shahid/ems-production
           find . -mindepth 1 -not -path './node_modules*' -not -name 'build.tar.gz' -exec rm -rf {} +
           tar -xzf build.tar.gz
           rm build.tar.gz
@@ -52,8 +51,9 @@ jobs:
       env:
         VPS_USER: ${{ secrets.VPS_USER }}
         VPS_IP: ${{ secrets.VPS_IP }}
+        VPS_PASSWORD: ${{ secrets.VPS_KEY }}
 
     - name: Debug - Post-deployment
       if: always()
       run: |
-        echo "Deployment step status: ${{ job.status }}
+        echo "Deployment step status: ${{ job.status }}"
