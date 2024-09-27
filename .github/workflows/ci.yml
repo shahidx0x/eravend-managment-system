@@ -42,7 +42,7 @@ jobs:
     - name: Deploy to VPS with elevated permissions
       run: |
         sshpass -p "${{ secrets.VPS_KEY }}" ssh -p 1076 -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} << EOF
-          sudo su - shahid
+          sudo su
           cd /home/shahid/ems-production
           find . -mindepth 1 -not -path './node_modules*' -not -name 'build.tar.gz' -exec rm -rf {} +
           tar -xzf build.tar.gz
