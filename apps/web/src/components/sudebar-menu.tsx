@@ -7,14 +7,10 @@ import { usePathname } from "next/navigation";
 
 import {
   Ellipsis,
-  LogOut,
-  Tag,
   Users,
-  Settings,
-  Bookmark,
-  SquarePen,
-  LayoutGrid,
   LucideIcon,
+  Building2,
+  CircleUser
 } from "lucide-react";
 
 import {
@@ -61,14 +57,14 @@ export function getMenuList(pathname: string): Group[] {
           href: "/dashboard/company",
           label: "Company",
           active: pathname.includes("/dashboard/company"),
-          icon: Bookmark,
+          icon: Building2,
           submenus: [],
         },
         {
           href: "/dashboard/users",
           label: "Users",
           active: pathname.includes("/dashboard/users"),
-          icon: Tag,
+          icon: Users,
           submenus: [],
         },
       ],
@@ -80,7 +76,7 @@ export function getMenuList(pathname: string): Group[] {
           href: "/dashboard/user-profile",
           label: "Account",
           active: pathname.includes("/dashboard/user-profile"),
-          icon: Users,
+          icon: CircleUser,
           submenus: [],
         },
       ],

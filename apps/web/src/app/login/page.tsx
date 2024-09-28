@@ -10,7 +10,8 @@ import { Button, Checkbox, Input, Label } from "@nx-next-shadcn/shadcn";
 
 
 import loginImg from "../../assets/login/Illustration.svg";
-import eravendLogo from "../../assets/login/eravend.svg";
+import eravendLogo from "../../assets/eravend.png";
+import eravendLogoLight from "../../assets/eravend-light.png";
 
 
 const Login = () => {
@@ -30,7 +31,12 @@ const Login = () => {
             <Image
               src={eravendLogo}
               alt="eravend_logo"
-              className="mx-auto w-full max-w-[300px]"
+              className="mx-auto w-full max-w-[300px] dark:hidden"
+            />
+            <Image
+              src={eravendLogoLight}
+              alt="eravend_logo"
+              className="mx-auto w-full max-w-[300px] hidden dark:block"
             />
 
             <form className="mt-8" onSubmit={handleSubmit}>

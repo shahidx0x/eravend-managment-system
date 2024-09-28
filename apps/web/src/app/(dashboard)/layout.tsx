@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-
-import Footer from "../../components/footer";
 import HeaderNav from "../../components/header-nav";
 import Sidebar from "../../components/sidebar";
 
@@ -14,11 +12,11 @@ export default function DashboardLayout({
   const [open, setOpen] = useState(true);
   return (
     <html lang="en">
-      <body className="flex flex-row">
+      <body className="flex">
         <Sidebar open={open} setOpen={setOpen} />
         <div
-          className={`flex flex-col justify-between bg-slate-50 transition-[flex-basis] duration-700 ease-in-out dark:bg-[#18181b] ${
-            open ? "basis-11/12" : "basis-full"
+          className={`flex flex-col justify-between bg-slate-50 transition-[width] duration-700 ease-in-out dark:bg-[#18181b] ${
+            open ? "w-[83%]" : "w-[calc(100%-4rem)]"
           }`}
         >
           <HeaderNav title="Dashboard"/>

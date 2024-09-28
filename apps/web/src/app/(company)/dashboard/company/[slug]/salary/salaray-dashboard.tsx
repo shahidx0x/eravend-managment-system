@@ -175,7 +175,7 @@ export default function SalarayDashboard() {
         </Alert>
       )}
       <div className="grid gap-4 md:grid-cols-5">
-        <Card className="md:col-span-4">
+        <Card className="md:col-span-3">
           <CardHeader>
             <CardTitle>Budget Overview</CardTitle>
           </CardHeader>
@@ -260,7 +260,7 @@ export default function SalarayDashboard() {
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="md:col-span-2">
           <CardHeader>
             <CardTitle>Currency Converter</CardTitle>
           </CardHeader>
