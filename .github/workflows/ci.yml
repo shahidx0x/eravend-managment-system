@@ -13,27 +13,43 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3  
+      uses: actions/checkout@v3
 
     - name: Install Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '20.10.0'
-        
-    # Cache PNPM Dependencies
-    - name: Cache PNPM dependencies
-      uses: actions/cache@v3
-      with:
-        path: ~/.pnpm-store
-        key: pnpm-cache-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
-        restore-keys: |
-          pnpm-cache-${{ runner.os }}-
 
-    - name: Install PNPM
-      run: npm i -g pnpm
+    - uses: pnpm/action-setup@v2
+      name: Install pnpm
+      with:
+        version: 8
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v3
+      name: Setup pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store-
 
     - name: Install dependencies
       run: pnpm install
+
+    - name: Cache Next.js build
+      uses: actions/cache@v3
+      with:
+        path: |
+          .next/cache
+        key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
+        restore-keys: |
+          ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-
 
     - name: Build the project
       run: pnpm run build
@@ -46,18 +62,18 @@ jobs:
 
     - name: Upload build artifacts to VPS
       run: |
-       sshpass -p "${{ secrets.VPS_KEY }}" scp -P ${{ secrets.VPS_PORT }} -o StrictHostKeyChecking=no build.tar.gz ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }}:/tmp/build.tar.gz
+        sshpass -p "${{ secrets.VPS_KEY }}" scp -P ${{ secrets.VPS_PORT }} -o StrictHostKeyChecking=no build.tar.gz ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }}:/tmp/build.tar.gz
 
-    # - name: Deploy to VPS with elevated permissions
-    #   run: |
-    #     sshpass -p "${{ secrets.VPS_KEY }}" ssh -T -p ${{ secrets.VPS_PORT }} -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} << EOF
-    #       echo "${{ secrets.VPS_KEY }}" | sudo -S mkdir -p /home/shahid/ems-production
-    #       echo "${{ secrets.VPS_KEY }}" | sudo -S chown -R shahid:shahid /home/shahid/ems-production
-    #       cd /home/shahid/ems-production
-    #       find . -mindepth 1 -not -path './node_modules*' -not -name 'build.tar.gz' -exec rm -rf {} +
-    #       tar -xzf build.tar.gz
-    #       rm build.tar.gz
-    #     EOF
+    - name: Deploy to VPS with elevated permissions
+      run: |
+        sshpass -p "${{ secrets.VPS_KEY }}" ssh -T -p ${{ secrets.VPS_PORT }} -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} << EOF
+          echo "${{ secrets.VPS_KEY }}" | sudo -S mv /tmp/build.tar.gz /www/wwwroot/ems-production
+          cd /www/wwwroot/ems-production
+          echo "${{ secrets.VPS_KEY }}" | sudo -S find . -mindepth 1 -not -path './node_modules*' -not -name 'build.tar.gz' -exec rm -rf {} +
+          echo "${{ secrets.VPS_KEY }}" | sudo -S tar -xzf build.tar.gz
+          echo "${{ secrets.VPS_KEY }}" | sudo -S rm build.tar.gz
+        EOF
+
       env:
         VPS_USER: ${{ secrets.VPS_USER }}
         VPS_IP: ${{ secrets.VPS_IP }}
