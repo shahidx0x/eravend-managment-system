@@ -5,32 +5,39 @@ import { Metadata } from "next";
 import { ThemeProvider } from "../provider/theme-provider";
 import "./global.css";
 
+
 export const metadata: Metadata = {
-  title: "EraVend System",
-  description: "This is the EraVend's All in One System.",
+  title: "EraVend System - Comprehensive Management Solution",
+  description:
+    "EraVend's all-in-one system offers powerful tools for managing and optimizing your business operations seamlessly.",
+
   openGraph: {
-    title: "EraVend System",
-    description: "This is the EraVend's CRM System.",
-    url: "https://i.ibb.co.com/d2dFyTw/logo-white.png",
+    title: "EraVend System - Complete Management Platform",
+    description:
+      "Discover EraVend's all-in-one management system, designed to streamline business processes and enhance productivity.",
+    url: "https://eravend.com",
     siteName: "EraVend",
     images: [
       {
-        url: "https://i.ibb.co.com/d2dFyTw/logo-white.png",
+        url: "https://i.ibb.co.com/qWB3n43/image.png",
         width: 1200,
         height: 630,
-        alt: "EraVend CRM",
+        alt: "EraVend System Logo",
       },
     ],
     type: "website",
     locale: "en_US",
   },
+
   twitter: {
     card: "summary_large_image",
-    title: "EraVend System",
-    description: "This is the EraVend's All in One System.",
-    images: ["https://i.ibb.co.com/d2dFyTw/logo-white.png"],
+    title: "EraVend System - Comprehensive Management Solution",
+    description:
+      "EraVend's powerful all-in-one system helps businesses streamline operations and maximize efficiency.",
+    images: ["https://i.ibb.co.com/qWB3n43/image.png"],
   },
 };
+
 export default function RootLayout({
   children,
 }: Readonly<{
