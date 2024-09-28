@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     title: "EraVend System - Complete Management Platform",
     description:
       "Discover EraVend's all-in-one management system, designed to streamline business processes and enhance productivity.",
-    url: "https://eravend.com",
+    url: "https://ems.eravend.com",
     siteName: "EraVend",
     images: [
       {
