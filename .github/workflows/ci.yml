@@ -46,18 +46,18 @@ jobs:
 
     - name: Upload build artifacts to VPS
       run: |
-        sshpass -p "${{ secrets.VPS_KEY }}" scp -P ${{ secrets.VPS_PORT }} -o StrictHostKeyChecking=no build.tar.gz ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }}:/home/shahid/ems-production/
+       sshpass -p "${{ secrets.VPS_KEY }}" scp -P ${{ secrets.VPS_PORT }} -o StrictHostKeyChecking=no build.tar.gz ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }}:/tmp/build.tar.gz
 
-    - name: Deploy to VPS with elevated permissions
-      run: |
-        sshpass -p "${{ secrets.VPS_KEY }}" ssh -T -p ${{ secrets.VPS_PORT }} -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} << EOF
-          echo "${{ secrets.VPS_KEY }}" | sudo -S mkdir -p /home/shahid/ems-production
-          echo "${{ secrets.VPS_KEY }}" | sudo -S chown -R shahid:shahid /home/shahid/ems-production
-          cd /home/shahid/ems-production
-          find . -mindepth 1 -not -path './node_modules*' -not -name 'build.tar.gz' -exec rm -rf {} +
-          tar -xzf build.tar.gz
-          rm build.tar.gz
-        EOF
+    # - name: Deploy to VPS with elevated permissions
+    #   run: |
+    #     sshpass -p "${{ secrets.VPS_KEY }}" ssh -T -p ${{ secrets.VPS_PORT }} -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} << EOF
+    #       echo "${{ secrets.VPS_KEY }}" | sudo -S mkdir -p /home/shahid/ems-production
+    #       echo "${{ secrets.VPS_KEY }}" | sudo -S chown -R shahid:shahid /home/shahid/ems-production
+    #       cd /home/shahid/ems-production
+    #       find . -mindepth 1 -not -path './node_modules*' -not -name 'build.tar.gz' -exec rm -rf {} +
+    #       tar -xzf build.tar.gz
+    #       rm build.tar.gz
+    #     EOF
       env:
         VPS_USER: ${{ secrets.VPS_USER }}
         VPS_IP: ${{ secrets.VPS_IP }}
