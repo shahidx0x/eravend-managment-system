@@ -79,7 +79,8 @@ jobs:
           echo "${{ secrets.VPS_KEY }}" | sudo -S find . -mindepth 1 -not -path './node_modules*' -not -name 'build.tar.gz' -exec rm -rf {} +
           echo "${{ secrets.VPS_KEY }}" | sudo -S tar -xzf build.tar.gz
           echo "${{ secrets.VPS_KEY }}" | sudo -S rm build.tar.gz
-          echo "${{ secrets.VPS_KEY }}" | sudo -S bash /www/server/nodejs/vhost/scripts/ems_production.sh > /dev/null
+          echo "${{ secrets.VPS_KEY }}" | sudo -S kill -9 $(fuser 3000/tcp 2>/dev/null)
+          echo "${{ secrets.VPS_KEY }}" | sudo -S bash /www/server/nodejs/vhost/scripts/ems_production.sh 2> /dev/null
         EOF
 
       env:
