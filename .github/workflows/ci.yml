@@ -42,17 +42,24 @@ jobs:
     - name: Install dependencies
       run: pnpm install
 
-    - name: Cache Next.js build
+    - name: Restore Next.js build cache
       uses: actions/cache@v3
       with:
         path: |
-          .next/cache
+          dist/apps/web/.next/cache
         key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
         restore-keys: |
-          ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-
+          ${{ runner.os }}-nextjs-
 
     - name: Build the project
       run: pnpm run build
+
+    - name: Save Next.js build cache
+      uses: actions/cache@v3
+      with:
+        path: |
+          dist/apps/web/.next/cache
+        key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
 
     - name: Install sshpass
       run: sudo apt-get install sshpass
