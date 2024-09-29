@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { Ellipsis, Tag, Users, Bookmark, LucideIcon } from "lucide-react";
+import { Ellipsis, LucideIcon, LayoutDashboard, MonitorCog, CircleDollarSign, BarChart3, User, BarChart2, BadgePercent } from "lucide-react";
 
 import {
   Button,
@@ -52,7 +52,7 @@ export function getCompanyMenuList(pathname: string): Group[] {
           active: pathname.includes(
             `/dashboard/company/${companyName}/employee/dashboard`,
           ),
-          icon: Bookmark,
+          icon: LayoutDashboard,
           submenus: [],
         },
       ],
@@ -66,14 +66,14 @@ export function getCompanyMenuList(pathname: string): Group[] {
           active: pathname.includes(
             `/dashboard/company/${companyName}/workforce`,
           ),
-          icon: Bookmark,
+          icon: MonitorCog,
           submenus: [],
         },
         {
           href: `/dashboard/company/${companyName}/salary`,
           label: "Salary",
           active: pathname.includes(`/dashboard/company/${companyName}/salary`),
-          icon: Tag,
+          icon: CircleDollarSign,
           submenus: [],
         },
       ],
@@ -108,7 +108,7 @@ export function getCompanyMenuList(pathname: string): Group[] {
           active: pathname.includes(
             `/dashboard/company/${companyName}/crm/sales`,
           ),
-          icon: Bookmark,
+          icon: BarChart3,
           submenus: [],
         },
         {
@@ -117,7 +117,7 @@ export function getCompanyMenuList(pathname: string): Group[] {
           active: pathname.includes(
             `/dashboard/company/${companyName}/crm/customers`,
           ),
-          icon: Tag,
+          icon: User,
           submenus: [],
         },
         {
@@ -126,7 +126,7 @@ export function getCompanyMenuList(pathname: string): Group[] {
           active: pathname.includes(
             `/dashboard/company/${companyName}/crm/marketing`,
           ),
-          icon: Tag,
+          icon: BadgePercent,
           submenus: [],
         },
         {
@@ -135,7 +135,7 @@ export function getCompanyMenuList(pathname: string): Group[] {
           active: pathname.includes(
             `/dashboard/company/${companyName}/crm/analytics`,
           ),
-          icon: Tag,
+          icon: BarChart2,
           submenus: [],
         },
       ],

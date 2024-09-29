@@ -263,14 +263,14 @@ export function DataTableCompany() {
 
   return (
     <div className="w-full">
-      <div className="flex items-center py-4">
+      <div className="flex items-center gap-4 py-4">
         <Input
           placeholder="Filter emails..."
           value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("email")?.setFilterValue(event.target.value)
           }
-          className="max-w-sm"
+          className="w-full max-w-sm"
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -377,8 +377,8 @@ export function DataTableCompany() {
           </DialogContent>
         </Dialog>
       </div>
-      <div className="rounded-md border">
-        <Table>
+      <div className="rounded-md border w-full overflow-x-auto">
+        <Table className="w-full min-w-[1200px]">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>

@@ -7,6 +7,9 @@ import { useRouter } from "next/navigation";
 
 import { ChevronRight, LayoutDashboard, LogOut } from "lucide-react";
 
+import eravendLogo from "../assets/eravend.png";
+import eravendLogoLight from "../assets/eravend-light.png";
+
 import {
   Button,
   Dialog,
@@ -19,7 +22,8 @@ import {
 } from "@nx-next-shadcn/shadcn";
 
 import { CompanyMenu } from "./company-sidebar-menu";
-import { Menu } from "./sudebar-menu";
+import Link from "next/link";
+import Image from "next/image";
 
 interface SideBarProps {
   open: boolean;
@@ -30,19 +34,24 @@ const CompanySidebar: React.FC<SideBarProps> = ({ open, setOpen }) => {
   const router = useRouter();
   return (
     <aside
-      className={`relative flex flex-col shadow-sm transition-[flex-basis] duration-700 ease-in-out ${
-        open ? "h-screen basis-2/12" : "h-screen basis-[4rem]"
+      className={`h-screen relative flex flex-col shadow-sm transition-[width] duration-700 ease-in-out ${
+        open ? "w-[17%]" : "w-[4rem]"
       }`}
     >
       <div className="center">
         {open ? (
-          <h2 className="p-2 font-mono text-5xl tracking-[0.2em]">ERAVEND</h2>
+          <Link href="/dashboard/company" className="mx-4 lg:mx-10 my-5">
+            <Image src={eravendLogo} alt="EraVend Logo" className="w-full dark:hidden" />
+            <Image src={eravendLogoLight} alt="EraVend Logo" className="w-full hidden dark:block" />
+          </Link>
         ) : (
-          <LayoutDashboard size={45} strokeWidth={1.0} />
+          <Link href="/dashboard/company">
+            <LayoutDashboard size={35} strokeWidth={1} className="m-4" />
+          </Link>
         )}
 
         <Button
-          className="absolute -right-8"
+          className="absolute -right-10 top-3.5"
           onClick={() => setOpen((state) => !state)}
           variant="outline"
           size="icon"
@@ -74,7 +83,7 @@ const LogoutDialog: React.FC<{ open: boolean; router: AppRouterInstance }> = ({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className={open ? "w-52" : "w-auto"}>
+        <Button variant="outline" className={open ? "w-full mx-5" : "w-full mx-5"}>
           <LogOut size={20} strokeWidth={1.25} />
           {open && <span className="ml-2">Logout</span>}
         </Button>
