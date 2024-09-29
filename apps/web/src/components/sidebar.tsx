@@ -26,7 +26,6 @@ import {
 } from "@nx-next-shadcn/shadcn";
 
 import { Menu } from "./sudebar-menu";
-import Link from "next/link";
 
 interface SideBarProps {
   open: boolean;
@@ -37,27 +36,25 @@ const Sidebar: React.FC<SideBarProps> = ({ open, setOpen }) => {
   const router = useRouter();
   return (
     <aside
-      className={`relative flex flex-col shadow-sm ${
+      className={`relative flex flex-col shadow-sm transition-[flex-basis] duration-700 ease-in-out ${
         open ? "h-screen basis-2/12" : "h-screen basis-[4rem]"
       }`}
     >
       <div className="center">
         {open ? (
-          <Link href={"/dashboard/company"} className="px-[38px] py-3 font-mono text-4xl tracking-[0.2em]">ERAVEND</Link>
+          <h2 className="p-2 font-mono text-5xl tracking-[0.2em]">ERAVEND</h2>
         ) : (
-          <Link href={"/dashboard/company"}>
-            <LayoutDashboard size={35} strokeWidth={1.0} className="m-4" />
-          </Link>
+          <LayoutDashboard size={45} strokeWidth={1.0} />
         )}
 
         <Button
-          className="absolute -right-10 top-3"
+          className="absolute -right-8"
           onClick={() => setOpen((state) => !state)}
           variant="outline"
           size="icon"
         >
           <ChevronRight
-            className={`h-4 w-4 ${
+            className={`h-4 w-4 transition-transform duration-700 ease-in-out ${
               open ? "rotate-180" : ""
             }`}
           />
@@ -83,7 +80,7 @@ const LogoutDialog: React.FC<{ open: boolean; router: AppRouterInstance }> = ({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className={open ? "w-56" : "w-auto"}>
+        <Button variant="outline" className={open ? "w-52" : "w-auto"}>
           <LogOut size={20} strokeWidth={1.25} />
           {open && <span className="ml-2">Logout</span>}
         </Button>
