@@ -1,9 +1,11 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { useState } from "react";
 
-import { Plus, Edit, Trash2, UserPlus, UserMinus } from "lucide-react";
+import { Plus, Edit, Trash2, User, UserPlus, UserMinus } from "lucide-react";
 
 import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
   Badge,
   Button,
   Card,
@@ -29,21 +31,21 @@ import {
   SelectValue,
 } from "@nx-next-shadcn/shadcn";
 
-export function ProjectsTab() {
-  type Project = {
-    id: number;
-    name: string;
-    progress: number;
-    budget: {
-      total: number;
-      spent: number;
-    };
-    status: string;
-    teamLead: string;
-    associates: string[];
+interface Project {
+  id: number;
+  name: string;
+  progress: number;
+  budget: {
+    total: number;
+    spent: number;
   };
+  status: string;
+  teamLead: string;
+  associates: string[];
+}
 
-  const [projects, setProjects] = useState<Project[] | null>([
+export function ProjectsTab() {
+  const [projects, setProjects] = useState<Project[]>([
     {
       id: 1,
       name: "Website Redesign",
@@ -73,41 +75,40 @@ export function ProjectsTab() {
     },
   ]);
 
-  const [editingProject, setEditingProject] = useState<Project | null>();
-  const [isAddingProject, setIsAddingProject] = useState(false);
-  const [newProject, setNewProject] = useState({
+  const [editingProject, setEditingProject] = useState<Project | null>(null);
+  const [isAddingProject, setIsAddingProject] = useState<boolean>(false);
+  const [newProject, setNewProject] = useState<
+    Omit<Project, "id" | "progress">
+  >({
     name: "",
     budget: { total: 0, spent: 0 },
     status: "To Do",
     teamLead: "",
     associates: [],
   });
-  const [viewingProject, setViewingProject] = useState(null);
-  const [newAssociate, setNewAssociate] = useState("");
+  const [viewingProject, setViewingProject] = useState<Project | null>(null);
+  const [newAssociate, setNewAssociate] = useState<string>("");
 
   const handleEditProject = (project: Project) => {
     setEditingProject({ ...project });
   };
 
   const handleUpdateProject = () => {
-    setProjects(
-      //@ts-ignore
-      projects.map((p) => (p.id === editingProject?.id ? editingProject : p)),
-    );
-    setEditingProject(null);
+    if (editingProject) {
+      setProjects(
+        projects.map((p) => (p.id === editingProject.id ? editingProject : p)),
+      );
+      setEditingProject(null);
+    }
   };
 
-  //@ts-ignore
-  const handleDeleteProject = (id) => {
-    //@ts-ignore
+  const handleDeleteProject = (id: number) => {
     setProjects(projects.filter((p) => p.id !== id));
   };
 
   const handleAddProject = () => {
     setProjects([
-      //@ts-ignore
       ...projects,
-      //@ts-ignore
       { ...newProject, id: projects.length + 1, progress: 0 },
     ]);
     setNewProject({
@@ -121,45 +122,44 @@ export function ProjectsTab() {
   };
 
   const handleAddAssociate = () => {
-    //@ts-ignore
-    if (newAssociate && !viewingProject.associates.includes(newAssociate)) {
+    if (
+      newAssociate &&
+      viewingProject &&
+      !viewingProject.associates.includes(newAssociate)
+    ) {
       const updatedProject = {
-        //@ts-ignore
         ...viewingProject,
-        //@ts-ignore
         associates: [...viewingProject.associates, newAssociate],
       };
       setViewingProject(updatedProject);
       setProjects(
-        //@ts-ignore
         projects.map((p) => (p.id === updatedProject.id ? updatedProject : p)),
       );
       setNewAssociate("");
     }
   };
-  //@ts-ignore
-  const handleRemoveAssociate = (associate) => {
-    const updatedProject = {
-      //@ts-ignore
-      ...viewingProject,
-      //@ts-ignore
-      associates: viewingProject.associates.filter((a) => a !== associate),
-    };
-    setViewingProject(updatedProject);
-    setProjects(
-      //@ts-ignore
-      projects.map((p) => (p.id === updatedProject.id ? updatedProject : p)),
-    );
+
+  const handleRemoveAssociate = (associate: string) => {
+    if (viewingProject) {
+      const updatedProject = {
+        ...viewingProject,
+        associates: viewingProject.associates.filter((a) => a !== associate),
+      };
+      setViewingProject(updatedProject);
+      setProjects(
+        projects.map((p) => (p.id === updatedProject.id ? updatedProject : p)),
+      );
+    }
   };
-  //@ts-ignore
-  const handleProgressUpdate = (value) => {
-    //@ts-ignore
-    const updatedProject = { ...viewingProject, progress: parseInt(value) };
-    setViewingProject(updatedProject);
-    setProjects(
-      //@ts-ignore
-      projects.map((p) => (p.id === updatedProject.id ? updatedProject : p)),
-    );
+
+  const handleProgressUpdate = (value: string) => {
+    if (viewingProject) {
+      const updatedProject = { ...viewingProject, progress: parseInt(value) };
+      setViewingProject(updatedProject);
+      setProjects(
+        projects.map((p) => (p.id === updatedProject.id ? updatedProject : p)),
+      );
+    }
   };
 
   return (
@@ -252,7 +252,7 @@ export function ProjectsTab() {
         </Dialog>
       </div>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {projects?.map((project) => (
+        {projects.map((project) => (
           <Card key={project.id}>
             <CardHeader>
               <CardTitle>{project.name}</CardTitle>
@@ -263,10 +263,9 @@ export function ProjectsTab() {
                 <div className="flex justify-between">
                   <span>Status:</span>
                   <Badge
-                    //@ts-ignore
                     variant={
                       project.status === "Completed"
-                        ? "success"
+                        ? "outline"
                         : project.status === "In Progress"
                           ? "default"
                           : "secondary"
@@ -291,7 +290,6 @@ export function ProjectsTab() {
             <CardFooter className="flex justify-between">
               <Dialog
                 onOpenChange={(open) => {
-                  //@ts-ignore
                   if (open) setViewingProject(project);
                   else setViewingProject(null);
                 }}
