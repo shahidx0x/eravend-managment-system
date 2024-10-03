@@ -1,11 +1,8 @@
 import { useState } from "react";
 
-import { Plus, Edit, Trash2, User, UserPlus, UserMinus } from "lucide-react";
+import { Plus, Edit, Trash2, UserPlus, UserMinus } from "lucide-react";
 
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
   Badge,
   Button,
   Card,

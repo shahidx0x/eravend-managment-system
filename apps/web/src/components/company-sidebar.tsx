@@ -2,28 +2,27 @@
 
 import React from "react";
 
+
+
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+
+
 
 import { ChevronRight, LayoutDashboard, LogOut } from "lucide-react";
 
-import eravendLogo from "../assets/eravend.png";
+
+
+import { Button, Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@nx-next-shadcn/shadcn";
+
+
+
 import eravendLogoLight from "../assets/eravend-light.png";
-
-import {
-  Button,
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@nx-next-shadcn/shadcn";
-
+import eravendLogo from "../assets/eravend.png";
 import { CompanyMenu } from "./company-sidebar-menu";
-import Link from "next/link";
-import Image from "next/image";
+
 
 interface SideBarProps {
   open: boolean;
@@ -32,6 +31,7 @@ interface SideBarProps {
 
 const CompanySidebar: React.FC<SideBarProps> = ({ open, setOpen }) => {
   const router = useRouter();
+
   return (
     <aside
       className={`h-screen relative flex flex-col shadow-sm transition-[width] duration-700 ease-in-out ${
@@ -83,7 +83,7 @@ const LogoutDialog: React.FC<{ open: boolean; router: AppRouterInstance }> = ({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className={open ? "w-full mx-5" : "w-full mx-5"}>
+        <Button variant="outline" className={open ? "w-full mx-5" : undefined}>
           <LogOut size={20} strokeWidth={1.25} />
           {open && <span className="ml-2">Logout</span>}
         </Button>
