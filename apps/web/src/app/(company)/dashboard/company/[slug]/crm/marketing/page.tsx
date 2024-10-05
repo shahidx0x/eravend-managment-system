@@ -4,7 +4,8 @@ import { Award, BookOpen, Briefcase, Send } from "lucide-react";
 
 import { Card, CardContent, CardTitle } from "@nx-next-shadcn/shadcn";
 
-import CampaignFilter from "./campaign-filter";
+import CampaignFilter from "./marketing-dashboard";
+import MarketingDashboard from "./marketing-dashboard";
 import MarketingTabs from "./marketing-tabs";
 
 const page = () => {
@@ -61,7 +62,7 @@ const page = () => {
       </div>
 
       <MarketingTabs />
-      <CampaignFilter />
+      <MarketingDashboard />
     </div>
   );
 };

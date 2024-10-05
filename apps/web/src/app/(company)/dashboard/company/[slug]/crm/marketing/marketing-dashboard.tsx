@@ -33,7 +33,7 @@ import {
   SelectValue,
 } from "@radix-ui/react-select";
 
-export default function CampaignFilter() {
+export default function MarketingDashboard() {
   const [searchTerm, setSearchTerm] = useState("");
   const [reportFormat, setReportFormat] = useState("pdf");
 
