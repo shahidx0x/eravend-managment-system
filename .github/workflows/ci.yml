@@ -12,83 +12,99 @@ jobs:
     environment: CICD
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Install Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20.10.0'
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.10.0'
 
-    - uses: pnpm/action-setup@v4
-      name: Install pnpm
-      with:
-        version: 8
-        run_install: false
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8
+          run_install: false
 
-    - name: Get pnpm store directory
-      shell: bash
-      run: |
-        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache@v4
-      name: Setup pnpm cache
-      with:
-        path: ${{ env.STORE_PATH }}
-        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-        restore-keys: |
-          ${{ runner.os }}-pnpm-store-
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
 
-    - name: Install dependencies
-      run: pnpm install
+      - name: Install dependencies
+        run: pnpm install
 
-    - name: Restore Next.js build cache
-      uses: actions/cache@v4
-      with:
-        path: |
-          dist/apps/web/.next/cache
-        key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
-        restore-keys: |
-          ${{ runner.os }}-nextjs-
+      - name: Restore Next.js build cache
+        id: nextjs-cache
+        uses: actions/cache@v4
+        with:
+          path: dist/apps/web/.next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**/*.[jt]s', '**/*.[jt]sx') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-
 
-    - name: Build the project
-      run: pnpm run build
+      - name: Restore build artifacts
+        id: build-artifacts-cache
+        uses: actions/cache@v4
+        with:
+          path: dist/apps/web
+          key: ${{ runner.os }}-build-artifacts-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**/*.[jt]s', '**/*.[jt]sx') }}
+          restore-keys: |
+            ${{ runner.os }}-build-artifacts-
 
-    - name: Save Next.js build cache
-      uses: actions/cache@v4
-      with:
-        path: |
-          dist/apps/web/.next/cache
-        key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
+      - name: Build the project
+        if: steps.build-artifacts-cache.outputs.cache-hit != 'true'
+        run: pnpm run build
 
-    - name: Install sshpass
-      run: sudo apt-get install sshpass
+      - name: Save Next.js build cache
+        uses: actions/cache@v4
+        with:
+          path: dist/apps/web/.next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**/*.[jt]s', '**/*.[jt]sx') }}
 
-    - name: Archive build artifacts
-      run: tar -czf build.tar.gz -C dist/apps/web .
+      - name: Save build artifacts
+        if: steps.build-artifacts-cache.outputs.cache-hit != 'true'
+        uses: actions/cache@v4
+        with:
+          path: dist/apps/web
+          key: ${{ runner.os }}-build-artifacts-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**/*.[jt]s', '**/*.[jt]sx') }}
 
-    - name: Upload build artifacts to VPS
-      run: |
-        sshpass -p "${{ secrets.VPS_KEY }}" scp -P ${{ secrets.VPS_PORT }} -o StrictHostKeyChecking=no build.tar.gz ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }}:/tmp/build.tar.gz
+      - name: Install sshpass
+        run: sudo apt-get install sshpass
 
-    - name: Deploy to VPS with elevated permissions
-      run: |
-        sshpass -p "${{ secrets.VPS_KEY }}" ssh -T -p ${{ secrets.VPS_PORT }} -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} << EOF
-          echo "${{ secrets.VPS_KEY }}" | sudo -S mv /tmp/build.tar.gz /www/wwwroot/ems-production
-          cd /www/wwwroot/ems-production
-          echo "${{ secrets.VPS_KEY }}" | sudo -S find . -mindepth 1 -not -path './node_modules*' -not -name 'build.tar.gz' -exec rm -rf {} +
-          echo "${{ secrets.VPS_KEY }}" | sudo -S tar -xzf build.tar.gz
-          echo "${{ secrets.VPS_KEY }}" | sudo -S rm build.tar.gz
-          echo "${{ secrets.VPS_KEY }}" | sudo -S bash /www/restart/restart_ems.sh
-        EOF
+      - name: Archive build artifacts
+        run: tar -czf build.tar.gz -C dist/apps/web .
 
-      env:
-        VPS_USER: ${{ secrets.VPS_USER }}
-        VPS_IP: ${{ secrets.VPS_IP }}
-        VPS_PASSWORD: ${{ secrets.VPS_KEY }}
-        VPS_PORT: ${{ secrets.VPS_PORT }}
+      - name: Upload build artifacts to VPS
+        run: |
+          sshpass -p "${{ secrets.VPS_KEY }}" scp -P ${{ secrets.VPS_PORT }} -o StrictHostKeyChecking=no build.tar.gz ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }}:/tmp/build.tar.gz
 
-    - name: Debug - Post-deployment
-      if: always()
-      run: |
-        echo "Deployment step status: ${{ job.status }}"
+      - name: Deploy to VPS with elevated permissions
+        run: |
+          sshpass -p "${{ secrets.VPS_KEY }}" ssh -T -p ${{ secrets.VPS_PORT }} -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} << EOF
+            echo "${{ secrets.VPS_KEY }}" | sudo -S mv /tmp/build.tar.gz /www/wwwroot/ems-production
+            cd /www/wwwroot/ems-production
+            echo "${{ secrets.VPS_KEY }}" | sudo -S find . -mindepth 1 -not -path './node_modules*' -not -name 'build.tar.gz' -exec rm -rf {} +
+            echo "${{ secrets.VPS_KEY }}" | sudo -S tar -xzf build.tar.gz
+            echo "${{ secrets.VPS_KEY }}" | sudo -S rm build.tar.gz
+            echo "${{ secrets.VPS_KEY }}" | sudo -S bash /www/restart/restart_ems.sh
+          EOF
+
+        env:
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_IP: ${{ secrets.VPS_IP }}
+          VPS_PASSWORD: ${{ secrets.VPS_KEY }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+
+      - name: Debug - Post-deployment
+        if: always()
+        run: |
+          echo "Deployment step status: ${{ job.status }}"
