@@ -78,27 +78,34 @@ export function getCompanyMenuList(pathname: string): Group[] {
         },
       ],
     },
-    // {
-    //   groupLabel: "Project Management",
-    //   menus: [
-    //     {
-    //       href: `/dashboard/company/${companyName}/attendance`,
-    //       label: "Attendance",
-    //       active: pathname.includes(
-    //         `/dashboard/company/${companyName}/attendance`,
-    //       ),
-    //       icon: Bookmark,
-    //       submenus: [],
-    //     },
-    //     {
-    //       href: `/dashboard/company/${companyName}/salary`,
-    //       label: "Salary",
-    //       active: pathname.includes(`/dashboard/company/${companyName}/salary`),
-    //       icon: Tag,
-    //       submenus: [],
-    //     },
-    //   ],
-    // },
+    {
+      groupLabel: "Project Management",
+      menus: [
+        {
+          href: `/dashboard/company/${companyName}/projects`,
+          label: "Manage",
+          active: pathname.includes(
+            `/dashboard/company/${companyName}/projects`,
+          ),
+          icon: MonitorCog,
+          submenus: [],
+        }
+      ],
+    },
+    {
+      groupLabel: "My Project",
+      menus: [
+        {
+          href: `/dashboard/company/${companyName}/my-projects`,
+          label: "Manage",
+          active: pathname.includes(
+            `/dashboard/company/${companyName}/my-projects`,
+          ),
+          icon: MonitorCog,
+          submenus: [],
+        }
+      ],
+    },
     {
       groupLabel: "CRM",
       menus: [
