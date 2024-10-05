@@ -78,16 +78,20 @@ jobs:
           key: ${{ runner.os }}-build-artifacts-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**/*.[jt]s', '**/*.[jt]sx') }}
 
       - name: Install sshpass
+        if: steps.build-artifacts-cache.outputs.cache-hit != 'true'
         run: sudo apt-get install sshpass
 
       - name: Archive build artifacts
+        if: steps.build-artifacts-cache.outputs.cache-hit != 'true'
         run: tar -czf build.tar.gz -C dist/apps/web .
 
       - name: Upload build artifacts to VPS
+        if: steps.build-artifacts-cache.outputs.cache-hit != 'true'
         run: |
           sshpass -p "${{ secrets.VPS_KEY }}" scp -P ${{ secrets.VPS_PORT }} -o StrictHostKeyChecking=no build.tar.gz ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }}:/tmp/build.tar.gz
 
       - name: Deploy to VPS with elevated permissions
+        if: steps.build-artifacts-cache.outputs.cache-hit != 'true'
         run: |
           sshpass -p "${{ secrets.VPS_KEY }}" ssh -T -p ${{ secrets.VPS_PORT }} -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} << EOF
             echo "${{ secrets.VPS_KEY }}" | sudo -S mv /tmp/build.tar.gz /www/wwwroot/ems-production
