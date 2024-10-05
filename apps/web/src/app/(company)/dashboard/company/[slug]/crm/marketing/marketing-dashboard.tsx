@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -118,7 +119,7 @@ export default function Marketing() {
     currency: "",
     period: "",
     periodValue: "",
-    targetAudience: [],
+    targetAudience: "",
     description: "",
   });
 
@@ -128,6 +129,11 @@ export default function Marketing() {
   const [campaignsPerPage] = useState(5);
   const [selectedType, setSelectedType] = useState("All");
   const type = ["All", ...new Set(campaigns.map((cam) => cam.type))];
+
+  const campaignTypes = ["Marketing", "Sales", "Awareness"];
+  const currencies = ["USD", "EUR", "GBP"];
+  const targetAudiences = ["Small Business", "Corporate Companies", "Startups"];
+
   const handleUpdateCampaign = () => {
     //@ts-ignore
     setCampaigns(campaigns.map((t) => (t.id === campaigns.id ? campaigns : t)));
@@ -142,31 +148,13 @@ export default function Marketing() {
     //@ts-ignore
     setEditingCampagin({ ...campaign });
   };
-  // Filter tasks based on selected project
-  const filteredCampagins =
-    selectedType === "All"
-      ? campaigns
-      : campaigns.filter((campagin) => campagin.name === selectedType);
 
-  // Get current tasks for pagination
-  const indexOfLastTask = currentPage * campaignsPerPage;
-  const indexOfFirstTask = indexOfLastTask - campaignsPerPage;
-  const currentCampagins = filteredCampagins.slice(
-    indexOfFirstTask,
-    indexOfLastTask,
-  );
-
-  // Change page
   //@ts-ignore
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedCampagin]);
-
-  const campaignTypes = ["Marketing", "Sales", "Awareness"];
-  const currencies = ["USD", "EUR", "GBP"];
-  const targetAudiences = ["Small Business", "Corporate Companies", "Startups"];
 
   const addCampaign = () => {
     // Ensure newCampaign has required fields (e.g., name and type)
@@ -186,11 +174,11 @@ export default function Marketing() {
         startDate: "2024-01-01",
         endDate: "2024-06-01",
         created: new Date().toISOString(),
-        action: "Edit", // Default action
+        action: "Edit", 
       },
     ]);
 
-    // Reset the form fields after adding
+  
     setNewCampaign({
       name: "",
       type: "",
@@ -198,7 +186,7 @@ export default function Marketing() {
       currency: "",
       period: "",
       periodValue: "",
-      targetAudience: [],
+      targetAudience: "",
       description: "",
     });
   };
@@ -206,6 +194,20 @@ export default function Marketing() {
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
+  const filteredCampagins = campaigns.filter((cam) =>
+    Object.values(cam).some(
+      (value) =>
+        typeof value === "string" &&
+        value.toLowerCase().includes(searchTerm.toLowerCase()),
+    ),
+  );
+    // Get current tasks for pagination
+    const indexOfLastTask = currentPage * campaignsPerPage;
+    const indexOfFirstTask = indexOfLastTask - campaignsPerPage;
+    const currentCampagins = filteredCampagins.slice(
+      indexOfFirstTask,
+      indexOfLastTask,
+    );
 
   return (
     <div className="container mx-auto p-4">
