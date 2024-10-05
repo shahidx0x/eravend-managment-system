@@ -79,7 +79,7 @@ jobs:
           echo "${{ secrets.VPS_KEY }}" | sudo -S find . -mindepth 1 -not -path './node_modules*' -not -name 'build.tar.gz' -exec rm -rf {} +
           echo "${{ secrets.VPS_KEY }}" | sudo -S tar -xzf build.tar.gz
           echo "${{ secrets.VPS_KEY }}" | sudo -S rm build.tar.gz
-          echo "${{ secrets.VPS_KEY }}" | sudo -S systemctl reload nginx
+          echo "${{ secrets.VPS_KEY }}" | sudo -S bash /www/restart/restart_ems.sh
         EOF
 
       env:
