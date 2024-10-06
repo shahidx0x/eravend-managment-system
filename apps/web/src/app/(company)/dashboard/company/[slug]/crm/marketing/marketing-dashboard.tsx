@@ -5,7 +5,8 @@ import { useState } from "react";
 
 
 import { Button, Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, Input, Label, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@nx-next-shadcn/shadcn";
-import { CampaignTable } from "./marketing-table.tsx";
+import { MarketingTable } from "./marketing-table";
+
 
 export default function Marketing() {
   interface Campaign {
@@ -229,7 +230,7 @@ export default function Marketing() {
         
         </div>
             
-      <CampaignTable />
+      <MarketingTable />
     </div>
   );
 };

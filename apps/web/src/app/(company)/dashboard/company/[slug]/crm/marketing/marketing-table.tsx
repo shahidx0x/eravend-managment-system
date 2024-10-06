@@ -258,7 +258,7 @@ export type Campaign = {
   ];
  
 
-  export function CampaignTable() {
+  export function MarketingTable() {
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
