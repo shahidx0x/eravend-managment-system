@@ -9,7 +9,7 @@ import { CustomerTable } from "./customer-table";
 
 
 export default function Customer() {
-    interface CustomerCampaign {
+    interface Customer {
         Customer: string;         // Updated field
         subject: string;          // Updated field
         customerId: string;       // Updated field
@@ -21,10 +21,10 @@ export default function Customer() {
     }
     
     const [isEditingCustomer, setIsEditingCustomer] = useState(false);
-    const [customers, setCustomers] = useState<CustomerCampaign[]>([]);
+    const [customers, setCustomers] = useState<Customer[]>([]);
     
     
-    const [newCustomer, setNewCustomer] = useState<CustomerCampaign>({
+    const [newCustomer, setNewCustomer] = useState<Customer>({
         Customer: "",
         subject: "",
         customerId: "",
