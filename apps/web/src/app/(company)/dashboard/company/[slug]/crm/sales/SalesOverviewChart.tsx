@@ -16,7 +16,7 @@ const SalesOverviewChart = () => {
   const chartConfig = {
     salesAmount: {
       label: "Sales Amount",
-      color: "#3e3e3e",
+      color: "#000000",
     },
   } satisfies ChartConfig
 
@@ -42,7 +42,7 @@ const SalesOverviewChart = () => {
           dataKey="salesAmount"
           type="natural"
           fill="var(--color-salesAmount)"
-          fillOpacity={0.4}
+          fillOpacity={1}
           stroke="var(--color-salesAmount)"
         />
       </AreaChart>
