@@ -1,15 +1,12 @@
+import { CardTitle } from "@nx-next-shadcn/shadcn";
 import Customer from "./customer-dashboard";
 
 const page = () => {
   return (
-    <div>
-      <div className="m-5 space-y-6">
-        <div>
-          <h1>Customers</h1>
-        </div>
-        </div>
+    <div className="p-4">
+      <CardTitle>Customers</CardTitle>
       <Customer/>
-      </div>
+    </div>
     
   )
    

@@ -144,7 +144,7 @@ export default function EmployeeDashboard() {
             <CardTitle>Todays Attendance</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex justify-between">
+            <div className="flex flex-wrap justify-between gap-4">
               <Button onClick={handleCheckIn}>
                 <Clock className="mr-2 h-4 w-4" /> Check In
               </Button>

@@ -12,7 +12,7 @@ import ProfileSettings from "./profile-settings";
 export default function AttendanceSystem() {
   return (
     <div className="container mx-auto p-4">
-      <Tabs defaultValue="dashboard" className="mb-6">
+      <Tabs defaultValue="dashboard">
         <TabsList>
           <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
           <TabsTrigger value="leave">Leave Requests</TabsTrigger>
@@ -22,7 +22,6 @@ export default function AttendanceSystem() {
         <TabsContent value="dashboard">
           <EmployeeDashboard />
         </TabsContent>
-
         <TabsContent value="leave">
           <LeaveRequest />
         </TabsContent>

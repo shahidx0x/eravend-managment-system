@@ -173,8 +173,8 @@ export default function LeaveRequest() {
         <CardHeader>
           <CardTitle>Leave Requests</CardTitle>
         </CardHeader>
-        <CardContent>
-          <Table>
+        <CardContent className="overflow-x-auto">
+          <Table className="min-w-[700px]">
             <TableHeader>
               <TableRow>
                 <TableHead>Type</TableHead>

@@ -18,7 +18,7 @@ export default function Dashboard() {
     <div className="container p-4">
       <Tabs defaultValue="monitor-dashboard">
         <div className="w-full overflow-auto">
-          <TabsList className="grid w-full min-w-[800px] grid-cols-5">
+          <TabsList className="grid w-full min-w-[900px] grid-cols-5">
             <TabsTrigger value="monitor-dashboard">Monitor Dashboard</TabsTrigger>
             <TabsTrigger value="leave">Leave Management</TabsTrigger>
             <TabsTrigger value="attendance">Attendance Monitoring</TabsTrigger>

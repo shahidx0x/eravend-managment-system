@@ -106,7 +106,7 @@ export default function AttendanceMonitoring() {
 
   return (
     <div>
-      <h2 className="mb-4 text-2xl font-bold">Attendance Monitoring</h2>
+      <h2 className="my-4 text-2xl font-bold">Attendance Monitoring</h2>
 
       <div className="mb-4 flex space-x-4">
         <div className="flex-1">
@@ -155,94 +155,96 @@ export default function AttendanceMonitoring() {
         )}
       </div>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Employee</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Date</TableHead>
-            <TableHead>Check In</TableHead>
-            <TableHead>Check Out</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {filteredRecords.map((record) => (
-            <TableRow key={record.id}>
-              <TableCell>{record.employee}</TableCell>
-              <TableCell>{record.email}</TableCell>
-              <TableCell>{record.date}</TableCell>
-              <TableCell>{record.checkIn}</TableCell>
-              <TableCell>{record.checkOut}</TableCell>
-              <TableCell>{record.status}</TableCell>
-              <TableCell>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button onClick={() => handleEdit(record)}>Edit</Button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-[425px]">
-                    <DialogHeader>
-                      <DialogTitle>Edit Attendance Record</DialogTitle>
-                      <DialogDescription>
-                        Make changes to the attendance record here. Click save
-                        when youre done.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <div className="grid gap-4 py-4">
-                      <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="checkIn" className="text-right">
-                          Check In
-                        </Label>
-                        <Input
-                          id="checkIn"
-                          value={editRecord?.checkIn || ""}
-                          onChange={(e) =>
-                            setEditRecord((prev) =>
-                              prev
-                                ? {
-                                    ...prev,
-                                    checkIn: e.target.value,
-                                  }
-                                : null,
-                            )
-                          }
-                          className="col-span-3"
-                        />
-                      </div>
-                      <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="checkOut" className="text-right">
-                          Check Out
-                        </Label>
-                        <Input
-                          id="checkOut"
-                          value={editRecord?.checkOut || ""}
-                          onChange={(e) =>
-                            setEditRecord((prev) =>
-                              prev
-                                ? {
-                                    ...prev,
-                                    checkOut: e.target.value,
-                                  }
-                                : null,
-                            )
-                          }
-                          className="col-span-3"
-                        />
-                      </div>
-                    </div>
-                    <DialogFooter>
-                      <Button type="submit" onClick={handleSave}>
-                        Save changes
-                      </Button>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
-              </TableCell>
+      <div className="overflow-x-auto">
+        <Table className="w-full min-w-[1000px]">
+          <TableHeader>
+            <TableRow>
+              <TableHead>Employee</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>Date</TableHead>
+              <TableHead>Check In</TableHead>
+              <TableHead>Check Out</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Actions</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {filteredRecords.map((record) => (
+              <TableRow key={record.id}>
+                <TableCell>{record.employee}</TableCell>
+                <TableCell>{record.email}</TableCell>
+                <TableCell>{record.date}</TableCell>
+                <TableCell>{record.checkIn}</TableCell>
+                <TableCell>{record.checkOut}</TableCell>
+                <TableCell>{record.status}</TableCell>
+                <TableCell>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button onClick={() => handleEdit(record)}>Edit</Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[425px]">
+                      <DialogHeader>
+                        <DialogTitle>Edit Attendance Record</DialogTitle>
+                        <DialogDescription>
+                          Make changes to the attendance record here. Click save
+                          when youre done.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="grid gap-4 py-4">
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="checkIn" className="text-right">
+                            Check In
+                          </Label>
+                          <Input
+                            id="checkIn"
+                            value={editRecord?.checkIn || ""}
+                            onChange={(e) =>
+                              setEditRecord((prev) =>
+                                prev
+                                  ? {
+                                      ...prev,
+                                      checkIn: e.target.value,
+                                    }
+                                  : null,
+                              )
+                            }
+                            className="col-span-3"
+                          />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="checkOut" className="text-right">
+                            Check Out
+                          </Label>
+                          <Input
+                            id="checkOut"
+                            value={editRecord?.checkOut || ""}
+                            onChange={(e) =>
+                              setEditRecord((prev) =>
+                                prev
+                                  ? {
+                                      ...prev,
+                                      checkOut: e.target.value,
+                                    }
+                                  : null,
+                              )
+                            }
+                            className="col-span-3"
+                          />
+                        </div>
+                      </div>
+                      <DialogFooter>
+                        <Button type="submit" onClick={handleSave}>
+                          Save changes
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }

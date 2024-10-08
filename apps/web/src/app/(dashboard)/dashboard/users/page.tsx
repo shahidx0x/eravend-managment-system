@@ -157,7 +157,7 @@ export default function UserManagment() {
     <div className="container mx-auto space-y-6 p-4">
       <h1 className="mb-6 text-3xl font-bold">User and Role Managment</h1>
 
-      <div className="mb-4 flex items-center justify-between gap-4 w-full">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-4 w-full">
         <Select onValueChange={setFilterCompany}>
           <SelectTrigger className="w-full max-w-[200px]">
             <SelectValue placeholder="Filter by Company" />
@@ -300,7 +300,7 @@ export default function UserManagment() {
       </div>
 
       <div className="w-full overflow-x-auto rounded-md border">
-        <Table className="w-full max-w-[1200px]">
+        <Table className="w-full min-w-[1200px]">
           <TableHeader>
             <TableRow>
               <TableHead>Name</TableHead>
