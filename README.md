@@ -1,1 +1,1 @@
-
+[![Deploy to Eravend Server](https://github.com/shahidx0x/eravend-managment-system/actions/workflows/ci.yml/badge.svg?branch=development&event=deployment)](https://github.com/shahidx0x/eravend-managment-system/actions/workflows/ci.yml)
