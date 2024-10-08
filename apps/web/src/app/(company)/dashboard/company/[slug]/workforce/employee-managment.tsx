@@ -87,10 +87,10 @@ export default function EmployeeManagement() {
   );
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="mb-4 text-2xl font-bold">Employee Management</h1>
+    <div>
+      <h1 className="my-4 text-2xl font-bold">Employee Management</h1>
 
-      <div className="mb-4 flex justify-between">
+      <div className="mb-4 flex gap-4 justify-between">
         <div className="mb-4 flex w-full items-center">
           <Search className="mr-2 h-5 w-5 text-gray-400" />
           <Input
@@ -184,39 +184,41 @@ export default function EmployeeManagement() {
         </Dialog>
       </div>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Phone Number</TableHead>
-            <TableHead>Role</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Action</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {filteredEmployees.map((employee) => (
-            <TableRow key={employee.id}>
-              <TableCell>{employee.name}</TableCell>
-              <TableCell>{employee.email}</TableCell>
-              <TableCell>{employee.phoneNumber}</TableCell>
-              <TableCell>{employee.role}</TableCell>
-              <TableCell>{employee.status}</TableCell>
-              <TableCell>
-                <Button
-                  onClick={() => toggleEmployeeStatus(employee.id)}
-                  variant={
-                    employee.status === "active" ? "destructive" : "default"
-                  }
-                >
-                  {employee.status === "active" ? "Block" : "Unblock"}
-                </Button>
-              </TableCell>
+      <div className="overflow-x-auto">
+        <Table className="w-full min-w-[1000px]">
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>Phone Number</TableHead>
+              <TableHead>Role</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Action</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {filteredEmployees.map((employee) => (
+              <TableRow key={employee.id}>
+                <TableCell>{employee.name}</TableCell>
+                <TableCell>{employee.email}</TableCell>
+                <TableCell>{employee.phoneNumber}</TableCell>
+                <TableCell>{employee.role}</TableCell>
+                <TableCell>{employee.status}</TableCell>
+                <TableCell>
+                  <Button
+                    onClick={() => toggleEmployeeStatus(employee.id)}
+                    variant={
+                      employee.status === "active" ? "destructive" : "default"
+                    }
+                  >
+                    {employee.status === "active" ? "Block" : "Unblock"}
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }

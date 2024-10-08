@@ -147,7 +147,7 @@ export function TasksTab() {
     <Card>
       <CardHeader>
         <div className="flex items-center justify-between">
-          <div>
+          <div className="space-y-1">
             <CardTitle>Tasks Monitor</CardTitle>
             <CardDescription>
               Manage and track all tasks across projects
@@ -168,224 +168,226 @@ export function TasksTab() {
         </div>
       </CardHeader>
       <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Title</TableHead>
-              <TableHead>Project</TableHead>
-              <TableHead>Assignee</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Priority</TableHead>
-              <TableHead>Due Date</TableHead>
-              <TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {currentTasks.map((task) => (
-              <TableRow key={task.id}>
-                <TableCell className="font-medium">{task.title}</TableCell>
-                <TableCell>{task.project}</TableCell>
-                <TableCell>
-                  <Avatar className="h-8 w-8">
-                    <AvatarFallback>{task.assignee[0]}</AvatarFallback>
-                  </Avatar>
-                </TableCell>
-                <TableCell>
-                  <Badge
-                    //@ts-ignore
-                    variant={
-                      task.status === "Completed"
-                        ? "success"
-                        : task.status === "In Progress"
-                          ? "default"
-                          : "secondary"
-                    }
-                  >
-                    {task.status}
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  <Badge
-                    variant={
-                      task.priority === "High"
-                        ? "destructive"
-                        : task.priority === "Medium"
-                          ? "default"
-                          : "secondary"
-                    }
-                  >
-                    {task.priority}
-                  </Badge>
-                </TableCell>
-                <TableCell>{task.dueDate}</TableCell>
-                <TableCell>
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleEditTask(task)}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>Edit Task</DialogTitle>
-                        <DialogDescription>
-                          Make changes to the task here.
-                        </DialogDescription>
-                      </DialogHeader>
-                      {editingTask && (
-                        <div className="grid gap-4 py-4">
-                          <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="edit-title" className="text-right">
-                              Title
-                            </Label>
-                            <Input
-                              id="edit-title"
-                              //@ts-ignore
-                              value={editingTask.title}
-                              onChange={(e) =>
-                                setEditingTask({
-                                  //@ts-ignore
-                                  ...editingTask,
-                                  title: e.target.value,
-                                })
-                              }
-                              className="col-span-3"
-                            />
-                          </div>
-                          <div className="grid grid-cols-4 items-center gap-4">
-                            <Label
-                              htmlFor="edit-project"
-                              className="text-right"
-                            >
-                              Project
-                            </Label>
-                            <Input
-                              id="edit-project"
-                              //@ts-ignore
-                              value={editingTask.project}
-                              onChange={(e) =>
-                                setEditingTask({
-                                  //@ts-ignore
-                                  ...editingTask,
-                                  project: e.target.value,
-                                })
-                              }
-                              className="col-span-3"
-                            />
-                          </div>
-                          <div className="grid grid-cols-4 items-center gap-4">
-                            <Label
-                              htmlFor="edit-assignee"
-                              className="text-right"
-                            >
-                              Assignee
-                            </Label>
-                            <Input
-                              id="edit-assignee"
-                              //@ts-ignore
-                              value={editingTask.assignee}
-                              onChange={(e) =>
-                                setEditingTask({
-                                  //@ts-ignore
-                                  ...editingTask,
-                                  assignee: e.target.value,
-                                })
-                              }
-                              className="col-span-3"
-                            />
-                          </div>
-                          <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="edit-status" className="text-right">
-                              Status
-                            </Label>
-                            <select
-                              id="edit-status"
-                              //@ts-ignore
-                              value={editingTask.status}
-                              onChange={(e) =>
-                                setEditingTask({
-                                  //@ts-ignore
-                                  ...editingTask,
-                                  status: e.target.value,
-                                })
-                              }
-                              className="col-span-3"
-                            >
-                              <option>To Do</option>
-                              <option>In Progress</option>
-                              <option>Completed</option>
-                            </select>
-                          </div>
-                          <div className="grid grid-cols-4 items-center gap-4">
-                            <Label
-                              htmlFor="edit-priority"
-                              className="text-right"
-                            >
-                              Priority
-                            </Label>
-                            <select
-                              id="edit-priority"
-                              //@ts-ignore
-                              value={editingTask.priority}
-                              onChange={(e) =>
-                                setEditingTask({
-                                  //@ts-ignore
-                                  ...editingTask,
-                                  priority: e.target.value,
-                                })
-                              }
-                              className="col-span-3"
-                            >
-                              <option>Low</option>
-                              <option>Medium</option>
-                              <option>High</option>
-                            </select>
-                          </div>
-                          <div className="grid grid-cols-4 items-center gap-4">
-                            <Label
-                              htmlFor="edit-dueDate"
-                              className="text-right"
-                            >
-                              Due Date
-                            </Label>
-                            <Input
-                              id="edit-dueDate"
-                              type="date"
-                              //@ts-ignore
-                              value={editingTask.dueDate}
-                              onChange={(e) =>
-                                setEditingTask({
-                                  //@ts-ignore
-                                  ...editingTask,
-                                  dueDate: e.target.value,
-                                })
-                              }
-                              className="col-span-3"
-                            />
-                          </div>
-                        </div>
-                      )}
-                      <DialogFooter>
-                        <Button onClick={handleUpdateTask}>Save changes</Button>
-                      </DialogFooter>
-                    </DialogContent>
-                  </Dialog>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleDeleteTask(task.id)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </TableCell>
+        <div className="overflow-x-auto">
+          <Table className="w-full min-w-[1000px]">
+            <TableHeader>
+              <TableRow>
+                <TableHead>Title</TableHead>
+                <TableHead>Project</TableHead>
+                <TableHead>Assignee</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Priority</TableHead>
+                <TableHead>Due Date</TableHead>
+                <TableHead>Actions</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {currentTasks.map((task) => (
+                <TableRow key={task.id}>
+                  <TableCell className="font-medium">{task.title}</TableCell>
+                  <TableCell>{task.project}</TableCell>
+                  <TableCell>
+                    <Avatar className="h-8 w-8">
+                      <AvatarFallback>{task.assignee[0]}</AvatarFallback>
+                    </Avatar>
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      //@ts-ignore
+                      variant={
+                        task.status === "Completed"
+                          ? "success"
+                          : task.status === "In Progress"
+                            ? "default"
+                            : "secondary"
+                      }
+                    >
+                      {task.status}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      variant={
+                        task.priority === "High"
+                          ? "destructive"
+                          : task.priority === "Medium"
+                            ? "default"
+                            : "secondary"
+                      }
+                    >
+                      {task.priority}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>{task.dueDate}</TableCell>
+                  <TableCell>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleEditTask(task)}
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Edit Task</DialogTitle>
+                          <DialogDescription>
+                            Make changes to the task here.
+                          </DialogDescription>
+                        </DialogHeader>
+                        {editingTask && (
+                          <div className="grid gap-4 py-4">
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label htmlFor="edit-title" className="text-right">
+                                Title
+                              </Label>
+                              <Input
+                                id="edit-title"
+                                //@ts-ignore
+                                value={editingTask.title}
+                                onChange={(e) =>
+                                  setEditingTask({
+                                    //@ts-ignore
+                                    ...editingTask,
+                                    title: e.target.value,
+                                  })
+                                }
+                                className="col-span-3"
+                              />
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label
+                                htmlFor="edit-project"
+                                className="text-right"
+                              >
+                                Project
+                              </Label>
+                              <Input
+                                id="edit-project"
+                                //@ts-ignore
+                                value={editingTask.project}
+                                onChange={(e) =>
+                                  setEditingTask({
+                                    //@ts-ignore
+                                    ...editingTask,
+                                    project: e.target.value,
+                                  })
+                                }
+                                className="col-span-3"
+                              />
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label
+                                htmlFor="edit-assignee"
+                                className="text-right"
+                              >
+                                Assignee
+                              </Label>
+                              <Input
+                                id="edit-assignee"
+                                //@ts-ignore
+                                value={editingTask.assignee}
+                                onChange={(e) =>
+                                  setEditingTask({
+                                    //@ts-ignore
+                                    ...editingTask,
+                                    assignee: e.target.value,
+                                  })
+                                }
+                                className="col-span-3"
+                              />
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label htmlFor="edit-status" className="text-right">
+                                Status
+                              </Label>
+                              <select
+                                id="edit-status"
+                                //@ts-ignore
+                                value={editingTask.status}
+                                onChange={(e) =>
+                                  setEditingTask({
+                                    //@ts-ignore
+                                    ...editingTask,
+                                    status: e.target.value,
+                                  })
+                                }
+                                className="col-span-3"
+                              >
+                                <option>To Do</option>
+                                <option>In Progress</option>
+                                <option>Completed</option>
+                              </select>
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label
+                                htmlFor="edit-priority"
+                                className="text-right"
+                              >
+                                Priority
+                              </Label>
+                              <select
+                                id="edit-priority"
+                                //@ts-ignore
+                                value={editingTask.priority}
+                                onChange={(e) =>
+                                  setEditingTask({
+                                    //@ts-ignore
+                                    ...editingTask,
+                                    priority: e.target.value,
+                                  })
+                                }
+                                className="col-span-3"
+                              >
+                                <option>Low</option>
+                                <option>Medium</option>
+                                <option>High</option>
+                              </select>
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label
+                                htmlFor="edit-dueDate"
+                                className="text-right"
+                              >
+                                Due Date
+                              </Label>
+                              <Input
+                                id="edit-dueDate"
+                                type="date"
+                                //@ts-ignore
+                                value={editingTask.dueDate}
+                                onChange={(e) =>
+                                  setEditingTask({
+                                    //@ts-ignore
+                                    ...editingTask,
+                                    dueDate: e.target.value,
+                                  })
+                                }
+                                className="col-span-3"
+                              />
+                            </div>
+                          </div>
+                        )}
+                        <DialogFooter>
+                          <Button onClick={handleUpdateTask}>Save changes</Button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleDeleteTask(task.id)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
         <div className="mt-4 flex items-center justify-between">
           <div>
             Showing {indexOfFirstTask + 1} to{" "}

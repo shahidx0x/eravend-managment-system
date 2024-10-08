@@ -21,6 +21,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@nx-next-shadcn/shadcn";
+import Image from "next/image";
 
 interface LeaveRequest {
   id: number;
@@ -108,8 +109,8 @@ export default function LeaveManagementAdmin() {
   );
 
   return (
-    <div className="container mx-auto p-4">
-      <h2 className="mb-4 text-2xl font-bold">Leave Management</h2>
+    <div>
+      <h2 className="my-4 text-2xl font-bold">Leave Management</h2>
       <div className="mb-4 flex items-center">
         <Search className="mr-2 h-5 w-5 text-gray-400" />
         <Input
@@ -120,95 +121,97 @@ export default function LeaveManagementAdmin() {
           className="w-full max-w-sm"
         />
       </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Employee</TableHead>
-            <TableHead>Type</TableHead>
-            <TableHead>Start Date</TableHead>
-            <TableHead>End Date</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Document</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {filteredRequests.map((request) => (
-            <TableRow key={request.id}>
-              <TableCell>{request.employee}</TableCell>
-              <TableCell>{request.type}</TableCell>
-              <TableCell>{request.startDate}</TableCell>
-              <TableCell>{request.endDate}</TableCell>
-              <TableCell>{request.status}</TableCell>
-              <TableCell>
-                {request.document ? (
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button variant="outline" size="sm">
-                        <Eye className="mr-2 h-4 w-4" />
-                        View Document
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>Document Preview</DialogTitle>
-                      </DialogHeader>
-                      <div className="mt-4">
-                        {request.document.type.startsWith("image/") ? (
-                          <img
-                            src={request.document.url}
-                            alt="Uploaded document"
-                            className="max-h-96 w-full object-contain"
-                          />
-                        ) : (
-                          <div className="flex flex-col items-center justify-center rounded border p-4">
-                            <p className="mb-2 text-lg font-semibold">
-                              {request.document.name}
-                            </p>
-                            <p className="text-sm text-gray-500">
-                              {request.document.type}
-                            </p>
-                            <Button
-                              className="mt-4"
-                              onClick={() =>
-                                window.open(request.document?.url, "_blank")
-                              }
-                            >
-                              Download Document
-                            </Button>
-                          </div>
-                        )}
-                      </div>
-                    </DialogContent>
-                  </Dialog>
-                ) : (
-                  <span className="text-gray-500">No document</span>
-                )}
-              </TableCell>
-              <TableCell>
-                {request.status === "Pending" && (
-                  <>
-                    <Button
-                      onClick={() => handleApprove(request.id)}
-                      className="mr-2"
-                      size="sm"
-                    >
-                      Approve
-                    </Button>
-                    <Button
-                      onClick={() => handleReject(request.id)}
-                      variant="destructive"
-                      size="sm"
-                    >
-                      Reject
-                    </Button>
-                  </>
-                )}
-              </TableCell>
+      <div className="overflow-x-auto">
+        <Table className="w-full min-w-[1000px]">
+          <TableHeader>
+            <TableRow>
+              <TableHead>Employee</TableHead>
+              <TableHead>Type</TableHead>
+              <TableHead>Start Date</TableHead>
+              <TableHead>End Date</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Document</TableHead>
+              <TableHead>Actions</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {filteredRequests.map((request) => (
+              <TableRow key={request.id}>
+                <TableCell>{request.employee}</TableCell>
+                <TableCell>{request.type}</TableCell>
+                <TableCell>{request.startDate}</TableCell>
+                <TableCell>{request.endDate}</TableCell>
+                <TableCell>{request.status}</TableCell>
+                <TableCell>
+                  {request.document ? (
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button variant="outline" size="sm">
+                          <Eye className="mr-2 h-4 w-4" />
+                          View Document
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Document Preview</DialogTitle>
+                        </DialogHeader>
+                        <div className="mt-4">
+                          {request.document.type.startsWith("image/") ? (
+                            <Image
+                              src={request.document.url}
+                              alt="Uploaded document"
+                              className="max-h-96 w-full object-contain"
+                            />
+                          ) : (
+                            <div className="flex flex-col items-center justify-center rounded border p-4">
+                              <p className="mb-2 text-lg font-semibold">
+                                {request.document.name}
+                              </p>
+                              <p className="text-sm text-gray-500">
+                                {request.document.type}
+                              </p>
+                              <Button
+                                className="mt-4"
+                                onClick={() =>
+                                  window.open(request.document?.url, "_blank")
+                                }
+                              >
+                                Download Document
+                              </Button>
+                            </div>
+                          )}
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+                  ) : (
+                    <span className="text-gray-500">No document</span>
+                  )}
+                </TableCell>
+                <TableCell>
+                  {request.status === "Pending" && (
+                    <>
+                      <Button
+                        onClick={() => handleApprove(request.id)}
+                        className="mr-2"
+                        size="sm"
+                      >
+                        Approve
+                      </Button>
+                      <Button
+                        onClick={() => handleReject(request.id)}
+                        variant="destructive"
+                        size="sm"
+                      >
+                        Reject
+                      </Button>
+                    </>
+                  )}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }

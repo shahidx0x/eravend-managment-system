@@ -167,7 +167,7 @@ export function DashboardOverview() {
           <CardContent>
             <ul className="space-y-4">
               {recentActivity.map((activity) => (
-                <li key={activity.id} className="flex items-center">
+                <li key={activity.id} className="flex items-center gap-1">
                   <Avatar className="h-9 w-9">
                     <AvatarImage src={activity.avatar} alt="Avatar" />
                     <AvatarFallback>
@@ -185,7 +185,7 @@ export function DashboardOverview() {
                       {activity.action}
                     </p>
                   </div>
-                  <div className="ml-auto font-medium">{activity.time}</div>
+                  <div className="ml-auto font-medium min-w-[70px]">{activity.time}</div>
                 </li>
               ))}
             </ul>

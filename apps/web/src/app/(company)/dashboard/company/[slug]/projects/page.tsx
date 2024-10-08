@@ -22,7 +22,6 @@ export default function Projects() {
       <Tabs
         value={activeTab}
         onValueChange={setActiveTab}
-        className="space-y-4"
       >
         <TabsList>
           <TabsTrigger value="dashboard">Dashboard</TabsTrigger>

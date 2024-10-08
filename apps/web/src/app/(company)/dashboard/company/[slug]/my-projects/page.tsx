@@ -239,6 +239,7 @@ export default function MyProjectsPage() {
                 ? "default"
                 : "secondary"
           }
+          className="w-fit"
         >
           {project.status}
         </Badge>
@@ -343,7 +344,7 @@ export default function MyProjectsPage() {
   return (
     <div className="container mx-auto p-4">
       <Tabs defaultValue="dashboard">
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className="grid w-full grid-cols-2 mb-4">
           <TabsTrigger value="dashboard">My Project Dashboard</TabsTrigger>
           <TabsTrigger value="kanban">Task Kanban Board</TabsTrigger>
         </TabsList>
@@ -356,9 +357,9 @@ export default function MyProjectsPage() {
               <TabsTrigger value="leading">Projects I'm Leading</TabsTrigger>
             </TabsList>
             <TabsContent value="assigned">
-              <h2 className="mb-4 text-2xl font-bold">
+              <CardTitle className="my-4">
                 Projects Assigned to Me
-              </h2>
+              </CardTitle>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {assignedProjects.map((project) => (
                   <ProjectCard
@@ -370,7 +371,7 @@ export default function MyProjectsPage() {
               </div>
             </TabsContent>
             <TabsContent value="leading">
-              <h2 className="mb-4 text-2xl font-bold">Projects I'm Leading</h2>
+              <CardTitle className="my-4">Projects I'm Leading</CardTitle>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {leadingProjects.map((project) => (
                   <ProjectCard
@@ -385,7 +386,7 @@ export default function MyProjectsPage() {
         </TabsContent>
         <TabsContent value="kanban">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-2xl font-bold">Task Kanban Board</h2>
+            <CardTitle className="">Task Kanban Board</CardTitle>
             <div className="flex gap-2">
               <Select
                 value={selectedProject}

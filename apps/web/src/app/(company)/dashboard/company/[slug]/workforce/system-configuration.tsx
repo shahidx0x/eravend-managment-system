@@ -65,8 +65,8 @@ export default function SystemConfiguration() {
   };
 
   return (
-    <div className="flex flex-col space-y-4">
-      <h2 className="mb-4 text-2xl font-bold">System Configuration</h2>
+    <div>
+      <h2 className="my-4 text-2xl font-bold">System Configuration</h2>
       <div className="flex flex-wrap gap-4">
         <Card className="min-w-[300px] flex-1">
           <CardHeader>

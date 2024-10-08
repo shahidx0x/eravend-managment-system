@@ -161,8 +161,8 @@ export function ProjectsTab() {
 
   return (
     <div>
-      <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-3xl font-bold">Projects</h2>
+      <div className="flex items-center justify-between my-4">
+        <CardTitle>Projects</CardTitle>
         <Dialog open={isAddingProject} onOpenChange={setIsAddingProject}>
           <DialogTrigger asChild>
             <Button>
