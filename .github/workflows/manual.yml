@@ -1,0 +1,17 @@
+name: Expose GitHub Action Runner IP
+
+# Manually trigger the workflow
+on:
+  workflow_dispatch:
+
+jobs:
+  expose-ip:
+    name: Expose GitHub Actions Runner IP
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get Public IP Address
+        run: |
+          echo "Fetching public IP address..."
+          PUBLIC_IP=$(curl -s https://checkip.amazonaws.com)
+          echo "The public IP address of this GitHub Actions runner is: $PUBLIC_IP"
